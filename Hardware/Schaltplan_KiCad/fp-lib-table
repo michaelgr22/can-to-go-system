@@ -4,4 +4,8 @@
   (lib (name "ESP")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/ESP.pretty")(options "")(descr ""))
   (lib (name "Level_Shifter")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/Level_Shifter.pretty")(options "")(descr ""))
   (lib (name "switches")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/switches.pretty")(options "")(descr ""))
+  (lib (name "Button")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/Button.pretty")(options "")(descr ""))
+  (lib (name "LED")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/LED.pretty")(options "")(descr ""))
+  (lib (name "USB2UART")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/USB2UART.pretty")(options "")(descr ""))
+  (lib (name "LDO")(type "KiCad")(uri "${KIPRJMOD}/parts/footprints/LDO.pretty")(options "")(descr ""))
 )
