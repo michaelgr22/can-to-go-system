@@ -3,4 +3,5 @@
   (lib (name "3-106505-2")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/3-106505-2.kicad_sym")(options "")(descr ""))
   (lib (name "ESP32-DEVKITC-32U")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/ESP32-DEVKITC-32U.kicad_sym")(options "")(descr ""))
   (lib (name "MINI-SPDT-SW")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/MINI-SPDT-SW.kicad_sym")(options "")(descr ""))
+  (lib (name "PCA9306DCTR")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/PCA9306DCTR.kicad_sym")(options "")(descr ""))
 )
