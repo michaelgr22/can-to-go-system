@@ -5,4 +5,8 @@
   (lib (name "MINI-SPDT-SW")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/MINI-SPDT-SW.kicad_sym")(options "")(descr ""))
   (lib (name "PCA9306DCTR")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/PCA9306DCTR.kicad_sym")(options "")(descr ""))
   (lib (name "B3FS-1010P")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/B3FS-1010P.kicad_sym")(options "")(descr ""))
+  (lib (name "1049")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/1049.kicad_sym")(options "")(descr ""))
+  (lib (name "L112012MS02Q")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/L112012MS02Q.kicad_sym")(options "")(descr ""))
+  (lib (name "TS01CQE")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/TS01CQE.kicad_sym")(options "")(descr ""))
+  (lib (name "LD1085V50")(type "KiCad")(uri "${KIPRJMOD}/parts/symbols/LD1085V50.kicad_sym")(options "")(descr ""))
 )
