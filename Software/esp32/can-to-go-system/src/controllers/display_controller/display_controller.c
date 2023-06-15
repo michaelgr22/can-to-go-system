@@ -3,17 +3,19 @@
 #include "display_controller.h"
 
 #include <stdio.h>
+#include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/i2c.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 #include "rom/uart.h"
 
 #include "utils/i2c-lcd1602/i2c-lcd1602.h"
 #include "utils/smbus/smbus.h"
 
-#include "models/display/menu_item.h"
+#include "models/display/baudrate_menu_item.h"
 #include "controllers/display_controller/utils/baudrate_menu/baudrate_menu.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
 
@@ -48,6 +50,7 @@ static void i2c_master_init()
     conf.scl_io_num = I2C_MASTER_SCL_IO;
     conf.scl_pullup_en = GPIO_PULLUP_DISABLE;
     conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+    conf.clk_flags = 0;
     i2c_param_config(i2c_master_port, &conf);
     i2c_driver_install(i2c_master_port, conf.mode,
                        I2C_MASTER_RX_BUF_LEN,
@@ -123,6 +126,7 @@ static void update_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
             }
             break;
         case BUTTON_ENTER:
+            send_twai_timing_config();
             break;
         case BUTTON_UP:
             if (selected_item_id == 3)
@@ -153,9 +157,9 @@ static void display_controller_task_handler(void *args)
     while (1)
     {
         update_baudrate_menu(lcd_info);
-    }
 
-    vTaskDelay(10);
+        vTaskDelay(10);
+    }
 }
 
 /*========== Extern Function Implementations ================================*/
