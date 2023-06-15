@@ -20,6 +20,6 @@ extern struct BaudrateMenuItem baudrate_menu[4];
 
 extern void init_baudrate_menu();
 extern int get_selected_item_id_of_baudrate_menu();
-extern void send_twai_timing_config();
+extern void send_baudrate();
 
 #endif

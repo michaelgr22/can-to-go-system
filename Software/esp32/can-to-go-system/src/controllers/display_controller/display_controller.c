@@ -126,7 +126,7 @@ static void update_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
             }
             break;
         case BUTTON_ENTER:
-            send_twai_timing_config();
+            send_baudrate();
             break;
         case BUTTON_UP:
             if (selected_item_id == 3)

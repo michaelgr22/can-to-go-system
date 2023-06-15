@@ -69,7 +69,7 @@ extern int get_selected_item_id_of_baudrate_menu()
     return -1;
 }
 
-extern void send_twai_timing_config()
+extern void send_baudrate()
 {
     int selected_item = get_selected_item_id_of_baudrate_menu();
 
