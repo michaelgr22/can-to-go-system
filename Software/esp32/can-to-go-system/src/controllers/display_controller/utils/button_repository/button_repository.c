@@ -4,18 +4,20 @@
 
 #include "freertos/FreeRTOS.h"
 #include "esp_timer.h"
+#include "esp_log.h"
 #include "driver/gpio.h"
 
 /*========== Macros and Definitions =========================================*/
 
-#define GPIO_BUTTON_DOWN GPIO_NUM_27
+#define GPIO_BUTTON_DOWN GPIO_NUM_35
 #define GPIO_BUTTON_ENTER GPIO_NUM_18
-#define GPIO_BUTTON_UP GPIO_NUM_35
+#define GPIO_BUTTON_UP GPIO_NUM_27
 #define GPIO_BIT_MASK_BUTTONS ((1ULL << GPIO_BUTTON_DOWN) | (1ULL << GPIO_BUTTON_ENTER) | (1ULL << GPIO_BUTTON_UP))
 
 /*========== Static Constant and Variable Definitions =======================*/
 
 static const int debounce_delay_ms = 125;
+static const char *log_tag = "button_controller";
 
 /*========== Static Function Prototypes =====================================*/
 
@@ -66,6 +68,8 @@ extern int is_button_pressed()
     {
         if (button_states[i] == 1)
         {
+            ESP_LOGI(log_tag, "Button pressed with ID: %d", i);
+            button_states[i] = 0;
             return i; // Found 1 in the array
         }
     }
