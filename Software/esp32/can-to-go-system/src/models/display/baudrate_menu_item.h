@@ -1,5 +1,5 @@
-#ifndef MENU_ITEM_H
-#define MENU_ITEM_H
+#ifndef BAUDRATE_MENU_ITEM_H
+#define BAUDRATE_MENU_ITEM_H
 
 /*========== Includes =======================================================*/
 
