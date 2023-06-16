@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "esp_log.h"
 
 #include "driver/twai.h"
 
@@ -17,6 +18,8 @@
 QueueHandle_t baudrate_selection_queue;
 
 struct BaudrateMenuItem baudrate_menu[4];
+
+static const char *log_tag = "baudrate_menu";
 
 static twai_timing_config_t baudrate_125kbits = TWAI_TIMING_CONFIG_125KBITS();
 static twai_timing_config_t baudrate_250kbits = TWAI_TIMING_CONFIG_250KBITS();
@@ -36,7 +39,6 @@ static int get_selected_item_id()
         {
             selected_id = baudrate_menu[i].id;
             return selected_id;
-            break;
         }
     }
     return -1;
@@ -74,6 +76,8 @@ extern void baudrate_menu_init()
     baudrate_menu[3].baudrate = &baudrate_1Mbits;
 
     baudrate_selection_queue = xQueueCreate(QUEUE_LENGTH, ITEM_SIZE);
+
+    ESP_LOGI(log_tag, "baudrate menu initialized");
 }
 
 extern void baudrate_menu_handle_button_pressed(enum Button button_pressed)
@@ -82,20 +86,7 @@ extern void baudrate_menu_handle_button_pressed(enum Button button_pressed)
     switch (button_pressed)
     {
     case BUTTON_DOWN:
-        if (selected_item_id == 0)
-        {
-            break;
-        }
-        else
-        {
-            baudrate_menu[selected_item_id].is_selected = 0;
-            baudrate_menu[selected_item_id - 1].is_selected = 1;
-        }
-        break;
-    case BUTTON_ENTER:
-        send_baudrate();
-        break;
-    case BUTTON_UP:
+        ESP_LOGI(log_tag, "BUTTON_DOWN pressed");
         if (selected_item_id == 3)
         {
             break;
@@ -104,6 +95,22 @@ extern void baudrate_menu_handle_button_pressed(enum Button button_pressed)
         {
             baudrate_menu[selected_item_id].is_selected = 0;
             baudrate_menu[selected_item_id + 1].is_selected = 1;
+        }
+        break;
+    case BUTTON_ENTER:
+        ESP_LOGI(log_tag, "BUTTON_ENTER pressed");
+        send_baudrate();
+        break;
+    case BUTTON_UP:
+        ESP_LOGI(log_tag, "BUTTON_UP pressed");
+        if (selected_item_id == 0)
+        {
+            break;
+        }
+        else
+        {
+            baudrate_menu[selected_item_id].is_selected = 0;
+            baudrate_menu[selected_item_id - 1].is_selected = 1;
         }
         break;
     default:
