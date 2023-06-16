@@ -6,6 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 #include "driver/twai.h"
 
 #include "controllers/fsm_controller/fsm_controller.h"
@@ -14,6 +15,8 @@
 
 #define CAN_TX_PIN GPIO_NUM_26
 #define CAN_RX_PIN GPIO_NUM_25
+
+#define CAN_TX_QUEUE_LENGTH 5
 
 /*========== Static Constant and Variable Definitions =======================*/
 
@@ -75,14 +78,71 @@ static void receive_can_messages_lookup()
     }
 }
 
+static int send_can_test_message()
+{
+    twai_message_t message;
+    message.extd = 0;
+    message.data_length_code = 8;
+    message.identifier = 0x7FF;
+    message.data[0] = 0x01;
+    message.data[1] = 0x01;
+    message.data[2] = 0x01;
+    message.data[3] = 0x01;
+    message.data[4] = 0x01;
+    message.data[5] = 0x01;
+    message.data[6] = 0x01;
+    message.data[7] = 0x01;
+
+    if (twai_transmit(&message, pdMS_TO_TICKS(10)) == ESP_OK)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+static int test_can_bus()
+{
+    static int test_can_bus_message_counter = 0;
+    static int test_can_bus_buffer[CAN_TX_QUEUE_LENGTH] = {0, 0, 0, 0, 0};
+
+    if (test_can_bus_message_counter <= CAN_TX_QUEUE_LENGTH - 1)
+    {
+        test_can_bus_buffer[test_can_bus_message_counter] = send_can_test_message();
+        test_can_bus_message_counter++;
+
+        return -1;
+    }
+    else
+    {
+        test_can_bus_message_counter = 0;
+        for (int i = 0; i < CAN_TX_QUEUE_LENGTH; i++)
+        {
+            if (test_can_bus_buffer[i] == 0)
+            {
+                return 0;
+            }
+        }
+        return 1;
+    }
+}
+
 static void can_controller_task_handler(void *args)
 {
     twai_timing_config_t *p_baudrate = (twai_timing_config_t *)args;
 
     init_can(p_baudrate);
 
+    int64_t previous_micros = 0UL;
+    int64_t interval = 100000UL;
+
+    int test_can_bus_result;
     while (1)
     {
+        int64_t current_micros = esp_timer_get_time();
+
         switch (fsm_controller_current_state)
         {
         case STARTING:
@@ -90,6 +150,19 @@ static void can_controller_task_handler(void *args)
         case CONFIGURATION:
             break;
         case OPERATION:
+            if (current_micros - previous_micros > interval)
+            {
+                test_can_bus_result = test_can_bus();
+                if (test_can_bus_result == 1)
+                {
+                    ESP_LOGI(log_tag, "can bus works successfully");
+                }
+                else if (test_can_bus_result == 0)
+                {
+                    ESP_LOGI(log_tag, "can bus is broken");
+                }
+                previous_micros = current_micros;
+            }
             receive_can_messages_lookup();
             break;
         }
