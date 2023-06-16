@@ -11,13 +11,13 @@
 /*========== Macros and Definitions =========================================*/
 
 #define QUEUE_LENGTH 5
-#define ITEM_SIZE sizeof(twai_timing_config_t *)
+#define ITEM_SIZE sizeof(void *)
 
 /*========== Static Constant and Variable Definitions =======================*/
 
 QueueHandle_t baudrate_selection_queue;
 
-struct BaudrateMenuItem baudrate_menu[4];
+struct MenuItem baudrate_menu[4];
 
 static const char *log_tag = "baudrate_menu";
 
@@ -48,7 +48,7 @@ static void send_baudrate()
 {
     int selected_item = get_selected_item_id();
 
-    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].baudrate, portMAX_DELAY);
+    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].value, portMAX_DELAY);
 }
 
 /*========== Extern Function Implementations ================================*/
@@ -58,22 +58,22 @@ extern void baudrate_menu_init()
     strcpy(baudrate_menu[0].text, "125 kbit/s");
     baudrate_menu[0].id = 0;
     baudrate_menu[0].is_selected = 1;
-    baudrate_menu[0].baudrate = &baudrate_125kbits;
+    baudrate_menu[0].value = &baudrate_125kbits;
 
     strcpy(baudrate_menu[1].text, "250 kbit/s");
     baudrate_menu[1].id = 1;
     baudrate_menu[1].is_selected = 0;
-    baudrate_menu[1].baudrate = &baudrate_250kbits;
+    baudrate_menu[1].value = &baudrate_250kbits;
 
     strcpy(baudrate_menu[2].text, "500 kbit/s");
     baudrate_menu[2].id = 2;
     baudrate_menu[2].is_selected = 0;
-    baudrate_menu[2].baudrate = &baudrate_500kbits;
+    baudrate_menu[2].value = &baudrate_500kbits;
 
     strcpy(baudrate_menu[3].text, "1 Mbit/s");
     baudrate_menu[3].id = 3;
     baudrate_menu[3].is_selected = 0;
-    baudrate_menu[3].baudrate = &baudrate_1Mbits;
+    baudrate_menu[3].value = &baudrate_1Mbits;
 
     baudrate_selection_queue = xQueueCreate(QUEUE_LENGTH, ITEM_SIZE);
 

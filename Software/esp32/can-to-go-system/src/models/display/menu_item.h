@@ -8,12 +8,12 @@
 #include "driver/twai.h"
 
 /*========== Model Declaration =========================================*/
-struct BaudrateMenuItem
+struct MenuItem
 {
     u_int8_t id;
     u_int8_t is_selected;
     char text[50];
-    twai_timing_config_t *baudrate;
+    void *value;
 };
 
 #endif

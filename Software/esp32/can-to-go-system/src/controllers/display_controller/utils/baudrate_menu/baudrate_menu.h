@@ -6,7 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
-#include "models/display/baudrate_menu_item.h"
+#include "models/display/menu_item.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
 
 /*========== Macros and Definitions =========================================*/
@@ -15,7 +15,7 @@
 
 extern QueueHandle_t baudrate_selection_queue;
 
-extern struct BaudrateMenuItem baudrate_menu[4];
+extern struct MenuItem baudrate_menu[4];
 
 /*========== Extern Function Prototypes =====================================*/
 
