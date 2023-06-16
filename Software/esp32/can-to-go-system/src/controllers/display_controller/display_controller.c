@@ -15,9 +15,9 @@
 #include "utils/i2c-lcd1602/i2c-lcd1602.h"
 #include "utils/smbus/smbus.h"
 
-#include "models/display/baudrate_menu_item.h"
 #include "controllers/display_controller/utils/baudrate_menu/baudrate_menu.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
+#include "controllers/display_controller/presentation/menu_presentation/menu_presentation.h"
 
 /*========== Macros and Definitions =========================================*/
 
@@ -57,7 +57,7 @@ static void i2c_master_init()
                        I2C_MASTER_TX_BUF_LEN, 0);
 }
 
-i2c_lcd1602_info_t *init_lcd()
+i2c_lcd1602_info_t *lcd_1602_init()
 {
     // Set up I2C
     i2c_master_init();
@@ -81,52 +81,32 @@ i2c_lcd1602_info_t *init_lcd()
 
     i2c_lcd1602_set_cursor(lcd_info, true);
 
+    ESP_LOGI(log_tag, "lcd display initialized");
+
     return lcd_info;
 }
 
-static void show_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
-{
-
-    i2c_lcd1602_reset(lcd_info);
-    char selected_string[52] = "> ";
-
-    for (int i = 0; i < (sizeof(baudrate_menu) / sizeof(baudrate_menu[0])); i++)
-    {
-        i2c_lcd1602_move_cursor(lcd_info, 0, i);
-
-        if (baudrate_menu[i].is_selected)
-        {
-            strcat(selected_string, baudrate_menu[i].text);
-            i2c_lcd1602_write_string(lcd_info, selected_string);
-        }
-        else
-        {
-            i2c_lcd1602_write_string(lcd_info, baudrate_menu[i].text);
-        }
-    }
-}
-
-static void update_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
+static void handle_button_pressed(i2c_lcd1602_info_t *lcd_info)
 {
     int button_pressed = is_button_pressed();
     if (button_pressed >= 0)
     {
         baudrate_menu_handle_button_pressed(button_pressed);
-        show_baudrate_menu(lcd_info);
+        menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size);
     }
 }
 
 static void display_controller_task_handler(void *args)
 {
-    i2c_lcd1602_info_t *lcd_info = init_lcd();
+    i2c_lcd1602_info_t *lcd_info = lcd_1602_init();
     init_button_repository();
     baudrate_menu_init();
 
-    show_baudrate_menu(lcd_info);
+    menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size);
 
     while (1)
     {
-        update_baudrate_menu(lcd_info);
+        handle_button_pressed(lcd_info);
 
         vTaskDelay(10);
     }

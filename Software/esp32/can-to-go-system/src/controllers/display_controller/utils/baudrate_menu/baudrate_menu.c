@@ -16,8 +16,8 @@
 /*========== Static Constant and Variable Definitions =======================*/
 
 QueueHandle_t baudrate_selection_queue;
-
 struct MenuItem baudrate_menu[4];
+int baudrate_menu_size = 4;
 
 static const char *log_tag = "baudrate_menu";
 

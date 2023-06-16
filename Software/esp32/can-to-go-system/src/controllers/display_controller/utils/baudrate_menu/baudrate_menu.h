@@ -15,6 +15,7 @@
 
 extern QueueHandle_t baudrate_selection_queue;
 
+extern int baudrate_menu_size;
 extern struct MenuItem baudrate_menu[4];
 
 /*========== Extern Function Prototypes =====================================*/
