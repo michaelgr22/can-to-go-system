@@ -8,6 +8,8 @@
 #include "esp_log.h"
 #include "driver/twai.h"
 
+#include "controllers/fsm_controller/fsm_controller.h"
+
 /*========== Macros and Definitions =========================================*/
 
 #define CAN_TX_PIN GPIO_NUM_26
@@ -76,13 +78,21 @@ static void receive_can_messages_lookup()
 static void can_controller_task_handler(void *args)
 {
     twai_timing_config_t *p_baudrate = (twai_timing_config_t *)args;
-    ESP_LOGI(log_tag, "can selected item: %p", p_baudrate);
 
     init_can(p_baudrate);
 
     while (1)
     {
-        receive_can_messages_lookup();
+        switch (fsm_controller_current_state)
+        {
+        case STARTING:
+            break;
+        case CONFIGURATION:
+            break;
+        case OPERATION:
+            receive_can_messages_lookup();
+            break;
+        }
         vTaskDelay(10);
     }
 }

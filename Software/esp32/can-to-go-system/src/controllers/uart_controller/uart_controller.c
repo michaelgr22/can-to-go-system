@@ -4,6 +4,8 @@
 
 #include "driver/uart.h"
 
+#include "controllers/fsm_controller/fsm_controller.h"
+
 /*========== Macros and Definitions =========================================*/
 
 /*========== Static Constant and Variable Definitions =======================*/
@@ -42,9 +44,22 @@ static void install_uart_driver()
 
 static void uart_controller_task_handler(void *pvParameters)
 {
+
     install_uart_driver();
+
     while (1)
     {
+
+        switch (fsm_controller_current_state)
+        {
+        case STARTING:
+            break;
+        case CONFIGURATION:
+            break;
+        case OPERATION:
+            break;
+        }
+
         vTaskDelay(10);
     }
 }

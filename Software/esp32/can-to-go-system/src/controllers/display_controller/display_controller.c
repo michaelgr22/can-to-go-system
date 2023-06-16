@@ -18,6 +18,7 @@
 #include "controllers/display_controller/utils/baudrate_menu/baudrate_menu.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
 #include "controllers/display_controller/presentation/menu_presentation/menu_presentation.h"
+#include "controllers/fsm_controller/fsm_controller.h"
 
 /*========== Macros and Definitions =========================================*/
 
@@ -106,7 +107,16 @@ static void display_controller_task_handler(void *args)
 
     while (1)
     {
-        handle_button_pressed(lcd_info);
+        switch (fsm_controller_current_state)
+        {
+        case STARTING:
+            break;
+        case CONFIGURATION:
+            handle_button_pressed(lcd_info);
+            break;
+        case OPERATION:
+            break;
+        }
 
         vTaskDelay(10);
     }
