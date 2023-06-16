@@ -7,6 +7,7 @@
 #include "freertos/queue.h"
 
 #include "models/display/baudrate_menu_item.h"
+#include "controllers/display_controller/utils/button_repository/button_repository.h"
 
 /*========== Macros and Definitions =========================================*/
 
@@ -18,8 +19,7 @@ extern struct BaudrateMenuItem baudrate_menu[4];
 
 /*========== Extern Function Prototypes =====================================*/
 
-extern void init_baudrate_menu();
-extern int get_selected_item_id_of_baudrate_menu();
-extern void send_baudrate();
+extern void baudrate_menu_init();
+extern void baudrate_menu_handle_button_pressed(enum Button pressed_button);
 
 #endif

@@ -18,18 +18,40 @@ QueueHandle_t baudrate_selection_queue;
 
 struct BaudrateMenuItem baudrate_menu[4];
 
-static const twai_timing_config_t baudrate_125kbits = TWAI_TIMING_CONFIG_125KBITS();
-static const twai_timing_config_t baudrate_250kbits = TWAI_TIMING_CONFIG_250KBITS();
-static const twai_timing_config_t baudrate_500kbits = TWAI_TIMING_CONFIG_500KBITS();
-static const twai_timing_config_t baudrate_1Mbits = TWAI_TIMING_CONFIG_1MBITS();
+static twai_timing_config_t baudrate_125kbits = TWAI_TIMING_CONFIG_125KBITS();
+static twai_timing_config_t baudrate_250kbits = TWAI_TIMING_CONFIG_250KBITS();
+static twai_timing_config_t baudrate_500kbits = TWAI_TIMING_CONFIG_500KBITS();
+static twai_timing_config_t baudrate_1Mbits = TWAI_TIMING_CONFIG_1MBITS();
 
 /*========== Static Function Prototypes =====================================*/
 
 /*========== Static Function Implementations ================================*/
 
+static int get_selected_item_id()
+{
+    int selected_id = -1;
+    for (int i = 0; i < (sizeof(baudrate_menu) / sizeof(baudrate_menu[0])); i++)
+    {
+        if (baudrate_menu[i].is_selected)
+        {
+            selected_id = baudrate_menu[i].id;
+            return selected_id;
+            break;
+        }
+    }
+    return -1;
+}
+
+static void send_baudrate()
+{
+    int selected_item = get_selected_item_id();
+
+    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].baudrate, portMAX_DELAY);
+}
+
 /*========== Extern Function Implementations ================================*/
 
-extern void init_baudrate_menu()
+extern void baudrate_menu_init()
 {
     strcpy(baudrate_menu[0].text, "125 kbit/s");
     baudrate_menu[0].id = 0;
@@ -54,24 +76,37 @@ extern void init_baudrate_menu()
     baudrate_selection_queue = xQueueCreate(QUEUE_LENGTH, ITEM_SIZE);
 }
 
-extern int get_selected_item_id_of_baudrate_menu()
+extern void baudrate_menu_handle_button_pressed(enum Button button_pressed)
 {
-    int selected_id = -1;
-    for (int i = 0; i < (sizeof(baudrate_menu) / sizeof(baudrate_menu[0])); i++)
+    int selected_item_id = get_selected_item_id();
+    switch (button_pressed)
     {
-        if (baudrate_menu[i].is_selected)
+    case BUTTON_DOWN:
+        if (selected_item_id == 0)
         {
-            selected_id = baudrate_menu[i].id;
-            return selected_id;
             break;
         }
+        else
+        {
+            baudrate_menu[selected_item_id].is_selected = 0;
+            baudrate_menu[selected_item_id - 1].is_selected = 1;
+        }
+        break;
+    case BUTTON_ENTER:
+        send_baudrate();
+        break;
+    case BUTTON_UP:
+        if (selected_item_id == 3)
+        {
+            break;
+        }
+        else
+        {
+            baudrate_menu[selected_item_id].is_selected = 0;
+            baudrate_menu[selected_item_id + 1].is_selected = 1;
+        }
+        break;
+    default:
+        break;
     }
-    return -1;
-}
-
-extern void send_baudrate()
-{
-    int selected_item = get_selected_item_id_of_baudrate_menu();
-
-    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].baudrate, portMAX_DELAY);
 }

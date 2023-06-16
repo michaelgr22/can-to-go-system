@@ -109,39 +109,9 @@ static void show_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
 static void update_baudrate_menu(i2c_lcd1602_info_t *lcd_info)
 {
     int button_pressed = is_button_pressed();
-    int selected_item_id = get_selected_item_id_of_baudrate_menu();
     if (button_pressed >= 0)
     {
-        switch (button_pressed)
-        {
-        case BUTTON_DOWN:
-            if (selected_item_id == 0)
-            {
-                break;
-            }
-            else
-            {
-                baudrate_menu[selected_item_id].is_selected = 0;
-                baudrate_menu[selected_item_id - 1].is_selected = 1;
-            }
-            break;
-        case BUTTON_ENTER:
-            send_baudrate();
-            break;
-        case BUTTON_UP:
-            if (selected_item_id == 3)
-            {
-                break;
-            }
-            else
-            {
-                baudrate_menu[selected_item_id].is_selected = 0;
-                baudrate_menu[selected_item_id + 1].is_selected = 1;
-            }
-            break;
-        default:
-            break;
-        }
+        baudrate_menu_handle_button_pressed(button_pressed);
         show_baudrate_menu(lcd_info);
     }
 }
@@ -150,7 +120,7 @@ static void display_controller_task_handler(void *args)
 {
     i2c_lcd1602_info_t *lcd_info = init_lcd();
     init_button_repository();
-    init_baudrate_menu();
+    baudrate_menu_init();
 
     show_baudrate_menu(lcd_info);
 
