@@ -6,7 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
-#include "models/display/menu_item.h"
+#include "data/models/display/menu_item.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
 
 /*========== Macros and Definitions =========================================*/

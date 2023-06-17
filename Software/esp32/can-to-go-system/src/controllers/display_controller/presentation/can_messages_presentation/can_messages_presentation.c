@@ -6,7 +6,7 @@
 #include "esp_log.h"
 
 #include "data/can_repository/can_repository.h"
-#include "models/display/message_item.h"
+#include "data/models/display/message_item.h"
 
 /*========== Macros and Definitions =========================================*/
 

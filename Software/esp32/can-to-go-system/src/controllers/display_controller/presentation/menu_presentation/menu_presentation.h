@@ -5,7 +5,7 @@
 
 #include "controllers/display_controller/utils/i2c-lcd1602/i2c-lcd1602.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
-#include "models/display/menu_item.h"
+#include "data/models/display/menu_item.h"
 
 /*========== Macros and Definitions =========================================*/
 
