@@ -44,7 +44,15 @@ extern int can_repository_received_message_to_display(char *display_message_text
         twai_message_t received_message;
         if (xQueueReceive(can_repository_received_messages_queue, &received_message, 1) == pdPASS)
         {
-            sprintf(display_message_text, "%lX ", received_message.identifier);
+            const int index_data_start = 9;
+            sprintf(display_message_text, "0x%lX", received_message.identifier);
+            const int needed_whitespaces = index_data_start - strlen(display_message_text);
+
+            for (int i = 0; i < needed_whitespaces; i++)
+            {
+                strcat(display_message_text, " ");
+            }
+
             int arrayLength = sizeof(received_message.data) / sizeof(received_message.data[0]);
 
             for (int i = 0; i < arrayLength; i++)
