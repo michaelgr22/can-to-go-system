@@ -59,19 +59,42 @@ static void update_current_can_messages()
     }
 }
 
+static int is_can_messages_updated(struct MessageItem old_can_messages[])
+{
+    for (int i = 0; i < DISPLAY_ROWS; i++)
+    {
+        if (strcmp(old_can_messages[i].text, current_can_messages[i].text) != 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 /*========== Extern Function Implementations ================================*/
 
 extern void can_messages_presentation_show(i2c_lcd1602_info_t *lcd_info)
 {
-    update_current_can_messages();
-    i2c_lcd1602_reset(lcd_info);
-
+    struct MessageItem old_can_messages[DISPLAY_ROWS];
     for (int i = 0; i < DISPLAY_ROWS; i++)
     {
-        if (current_can_messages[i].id != -1)
+        old_can_messages[i].id = current_can_messages[i].id;
+        strcpy(old_can_messages[i].text, current_can_messages[i].text);
+    }
+
+    update_current_can_messages();
+
+    if (is_can_messages_updated(old_can_messages))
+    {
+        i2c_lcd1602_reset(lcd_info);
+
+        for (int i = 0; i < DISPLAY_ROWS; i++)
         {
-            i2c_lcd1602_move_cursor(lcd_info, 0, i);
-            i2c_lcd1602_write_string(lcd_info, current_can_messages[i].text);
+            if (current_can_messages[i].id != -1)
+            {
+                i2c_lcd1602_move_cursor(lcd_info, 0, i);
+                i2c_lcd1602_write_string(lcd_info, current_can_messages[i].text);
+            }
         }
     }
 }
