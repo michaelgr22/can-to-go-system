@@ -30,27 +30,6 @@ static twai_timing_config_t baudrate_1Mbits = TWAI_TIMING_CONFIG_1MBITS();
 
 /*========== Static Function Implementations ================================*/
 
-static int get_selected_item_id()
-{
-    int selected_id = -1;
-    for (int i = 0; i < (sizeof(baudrate_menu) / sizeof(baudrate_menu[0])); i++)
-    {
-        if (baudrate_menu[i].is_selected)
-        {
-            selected_id = baudrate_menu[i].id;
-            return selected_id;
-        }
-    }
-    return -1;
-}
-
-static void send_baudrate()
-{
-    int selected_item = get_selected_item_id();
-
-    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].value, portMAX_DELAY);
-}
-
 /*========== Extern Function Implementations ================================*/
 
 extern void baudrate_menu_init()
@@ -80,40 +59,7 @@ extern void baudrate_menu_init()
     ESP_LOGI(log_tag, "baudrate menu initialized");
 }
 
-extern void baudrate_menu_handle_button_pressed(enum Button button_pressed)
+extern void baudrate_menu_send_baudrate(int selected_item)
 {
-    int selected_item_id = get_selected_item_id();
-    switch (button_pressed)
-    {
-    case BUTTON_DOWN:
-        ESP_LOGI(log_tag, "BUTTON_DOWN pressed");
-        if (selected_item_id == 3)
-        {
-            break;
-        }
-        else
-        {
-            baudrate_menu[selected_item_id].is_selected = 0;
-            baudrate_menu[selected_item_id + 1].is_selected = 1;
-        }
-        break;
-    case BUTTON_ENTER:
-        ESP_LOGI(log_tag, "BUTTON_ENTER pressed");
-        send_baudrate();
-        break;
-    case BUTTON_UP:
-        ESP_LOGI(log_tag, "BUTTON_UP pressed");
-        if (selected_item_id == 0)
-        {
-            break;
-        }
-        else
-        {
-            baudrate_menu[selected_item_id].is_selected = 0;
-            baudrate_menu[selected_item_id - 1].is_selected = 1;
-        }
-        break;
-    default:
-        break;
-    }
+    xQueueSend(baudrate_selection_queue, &baudrate_menu[selected_item].value, portMAX_DELAY);
 }

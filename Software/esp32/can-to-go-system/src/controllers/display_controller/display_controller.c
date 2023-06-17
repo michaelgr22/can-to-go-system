@@ -88,35 +88,30 @@ i2c_lcd1602_info_t *lcd_1602_init()
     return lcd_info;
 }
 
-static void handle_button_pressed(i2c_lcd1602_info_t *lcd_info)
-{
-    int button_pressed = is_button_pressed();
-    if (button_pressed >= 0)
-    {
-        baudrate_menu_handle_button_pressed(button_pressed);
-        menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size);
-    }
-}
-
 static void display_controller_task_handler(void *args)
 {
     i2c_lcd1602_info_t *lcd_info = lcd_1602_init();
     init_button_repository();
     baudrate_menu_init();
 
-    menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size);
+    menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size, baudrate_menu_send_baudrate, NO_BUTTON_PRESSED, true);
 
     while (1)
     {
+        int button_pressed = is_button_pressed();
+        if (button_pressed >= 0)
+        {
+            ESP_LOGI(log_tag, "button with id %d pressed", button_pressed);
+        }
         switch (fsm_controller_current_state)
         {
         case STARTING:
             break;
         case CONFIGURATION:
-            handle_button_pressed(lcd_info);
+            menu_presentation_show(lcd_info, baudrate_menu, baudrate_menu_size, baudrate_menu_send_baudrate, button_pressed, false);
             break;
         case OPERATION:
-            can_messages_presentation_show(lcd_info);
+            can_messages_presentation_show(lcd_info, button_pressed);
             break;
         }
 

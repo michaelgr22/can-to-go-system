@@ -21,6 +21,6 @@ extern struct MenuItem baudrate_menu[4];
 /*========== Extern Function Prototypes =====================================*/
 
 extern void baudrate_menu_init();
-extern void baudrate_menu_handle_button_pressed(enum Button pressed_button);
+extern void baudrate_menu_send_baudrate(int selected_item);
 
 #endif

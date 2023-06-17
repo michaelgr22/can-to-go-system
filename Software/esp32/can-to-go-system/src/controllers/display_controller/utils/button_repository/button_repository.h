@@ -13,9 +13,10 @@ enum ButtonStates
 
 enum Button
 {
-    BUTTON_DOWN,
-    BUTTON_ENTER,
-    BUTTON_UP
+    NO_BUTTON_PRESSED = -1,
+    BUTTON_DOWN = 0,
+    BUTTON_ENTER = 1,
+    BUTTON_UP = 2
 };
 
 /*========== Extern Constant and Variable Declarations ======================*/
