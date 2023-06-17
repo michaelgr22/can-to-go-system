@@ -10,6 +10,7 @@
 #include "driver/twai.h"
 
 #include "controllers/fsm_controller/fsm_controller.h"
+#include "data/can_repository/can_repository.h"
 
 /*========== Macros and Definitions =========================================*/
 
@@ -74,6 +75,7 @@ static void receive_can_messages_lookup()
             strcat(result, item);
         }
 
+        can_repository_send_message(message);
         ESP_LOGI(log_tag, "Message received: %ld %s", message.identifier, result);
     }
 }
@@ -134,6 +136,7 @@ static void can_controller_task_handler(void *args)
     twai_timing_config_t *p_baudrate = (twai_timing_config_t *)args;
 
     init_can(p_baudrate);
+    can_repository_init();
 
     int64_t previous_micros = 0UL;
     int64_t interval = 100000UL;

@@ -18,6 +18,7 @@
 #include "controllers/display_controller/utils/baudrate_menu/baudrate_menu.h"
 #include "controllers/display_controller/utils/button_repository/button_repository.h"
 #include "controllers/display_controller/presentation/menu_presentation/menu_presentation.h"
+#include "controllers/display_controller/presentation/can_messages_presentation/can_messages_presentation.h"
 #include "controllers/fsm_controller/fsm_controller.h"
 
 /*========== Macros and Definitions =========================================*/
@@ -115,6 +116,7 @@ static void display_controller_task_handler(void *args)
             handle_button_pressed(lcd_info);
             break;
         case OPERATION:
+            can_messages_presentation_show(lcd_info);
             break;
         }
 
