@@ -1,11 +1,9 @@
-#ifndef BAUDRATE_MENU_ITEM_H
-#define BAUDRATE_MENU_ITEM_H
+#ifndef MENU_ITEM_H
+#define MENU_ITEM_H
 
 /*========== Includes =======================================================*/
 
 #include <stdio.h>
-
-#include "driver/twai.h"
 
 /*========== Model Declaration =========================================*/
 struct MenuItem
