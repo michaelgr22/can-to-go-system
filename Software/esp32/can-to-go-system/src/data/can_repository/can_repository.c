@@ -73,7 +73,13 @@ extern void can_repository_distribute_received_message(twai_message_t received_c
     struct MessageItem received_message_item = can_message_to_display_message_item(received_can_message);
     xQueueSend(display_messages_queue, &received_message_item, 1);
 
-    struct Led led_blue_send = {LED_BLUE_RECEIVE, LED_ON};
+    struct Led led_blue_receive = {LED_BLUE_RECEIVE, LED_ON};
+    xQueueSend(led_status_queue, &led_blue_receive, 1);
+}
+
+extern void can_repository_distribute_send_message()
+{
+    struct Led led_blue_send = {LED_BLUE_SEND, LED_ON};
     xQueueSend(led_status_queue, &led_blue_send, 1);
 }
 

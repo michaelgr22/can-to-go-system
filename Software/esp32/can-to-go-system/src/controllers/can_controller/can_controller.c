@@ -95,6 +95,19 @@ static void receive_can_messages_lookup()
     }
 }
 
+static int send_can_message(twai_message_t message)
+{
+    if (twai_transmit(&message, pdMS_TO_TICKS(10)) == ESP_OK)
+    {
+        can_repository_distribute_send_message();
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 static int send_can_test_message()
 {
     twai_message_t message;
@@ -110,14 +123,7 @@ static int send_can_test_message()
     message.data[6] = 0x01;
     message.data[7] = 0x01;
 
-    if (twai_transmit(&message, pdMS_TO_TICKS(10)) == ESP_OK)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+    return send_can_message(message);
 }
 
 static int test_can_bus()

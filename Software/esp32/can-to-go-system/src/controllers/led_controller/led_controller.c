@@ -20,9 +20,16 @@
 static const char *log_tag = "led_controller";
 
 TimerHandle_t receive_message_led_timer;
-const char receive_message_led_timer_name[] = "CAN_SEND_MESSAGE_TIMER";
-int receive_message_led_interrupt_flag = 0;
+TimerHandle_t send_message_led_timer;
+
+const char receive_message_led_timer_name[] = "CAN_RECEIVE_MESSAGE_TIMER";
+const char send_message_led_timer_name[] = "CAN_SEND_MESSAGE_TIMER";
+
 const int receive_message_led_period_ms = 100;
+const int send_message_led_period_ms = 100;
+
+int receive_message_led_interrupt_flag = 0;
+int send_message_led_interrupt_flag = 0;
 
 /*========== Static Function Prototypes =====================================*/
 
@@ -32,6 +39,12 @@ static void receive_message_led_timer_handler(TimerHandle_t timer)
 {
     xTimerStopFromISR(timer, 0);
     receive_message_led_interrupt_flag = 1;
+}
+
+static void send_message_led_timer_handler(TimerHandle_t timer)
+{
+    xTimerStopFromISR(timer, 0);
+    send_message_led_interrupt_flag = 1;
 }
 
 static void gpios_init()
@@ -50,6 +63,7 @@ static void gpios_init()
     gpio_set_level(LED_BLUE_RECEIVE, LED_OFF);
 
     receive_message_led_timer = xTimerCreate(receive_message_led_timer_name, pdMS_TO_TICKS(receive_message_led_period_ms), pdTRUE, 0, receive_message_led_timer_handler);
+    send_message_led_timer = xTimerCreate(send_message_led_timer_name, pdMS_TO_TICKS(send_message_led_period_ms), pdTRUE, 0, send_message_led_timer_handler);
 
     ESP_LOGI(log_tag, "gpios for leds initialized");
 }
@@ -77,6 +91,13 @@ static void led_controller_task_handler()
                     xTimerStart(receive_message_led_timer, 0);
                 }
                 break;
+            case LED_BLUE_SEND:
+                gpio_set_level(LED_BLUE_SEND, LED_ON);
+                if (xTimerIsTimerActive(send_message_led_timer) != pdTRUE)
+                {
+                    xTimerStart(send_message_led_timer, 0);
+                }
+                break;
             default:
                 break;
             }
@@ -86,10 +107,15 @@ static void led_controller_task_handler()
                 gpio_set_level(LED_BLUE_RECEIVE, LED_OFF);
                 receive_message_led_interrupt_flag = 0;
             }
+            if (send_message_led_interrupt_flag == 1)
+            {
+                gpio_set_level(LED_BLUE_SEND, LED_OFF);
+                send_message_led_interrupt_flag = 0;
+            }
             break;
         }
 
-        vTaskDelay(10);
+        vTaskDelay(1);
     }
 }
 
