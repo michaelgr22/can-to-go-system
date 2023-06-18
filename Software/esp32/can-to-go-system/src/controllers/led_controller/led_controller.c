@@ -68,13 +68,52 @@ static void gpios_init()
     ESP_LOGI(log_tag, "gpios for leds initialized");
 }
 
+static void handle_led_update()
+{
+    struct Led led_to_update = can_repository_to_led();
+
+    switch (led_to_update.gpio)
+    {
+    case LED_BLUE_RECEIVE:
+        gpio_set_level(LED_BLUE_RECEIVE, LED_ON);
+        if (xTimerIsTimerActive(receive_message_led_timer) != pdTRUE)
+        {
+            xTimerStart(receive_message_led_timer, 0);
+        }
+        break;
+    case LED_BLUE_SEND:
+        gpio_set_level(LED_BLUE_SEND, LED_ON);
+        if (xTimerIsTimerActive(send_message_led_timer) != pdTRUE)
+        {
+            xTimerStart(send_message_led_timer, 0);
+        }
+        break;
+    default:
+        if (led_to_update.gpio != LED_NONE)
+        {
+            gpio_set_level(led_to_update.gpio, led_to_update.value);
+        }
+        break;
+    }
+
+    if (receive_message_led_interrupt_flag == 1)
+    {
+        gpio_set_level(LED_BLUE_RECEIVE, LED_OFF);
+        receive_message_led_interrupt_flag = 0;
+    }
+    if (send_message_led_interrupt_flag == 1)
+    {
+        gpio_set_level(LED_BLUE_SEND, LED_OFF);
+        send_message_led_interrupt_flag = 0;
+    }
+}
+
 static void led_controller_task_handler()
 {
     gpios_init();
 
     while (1)
     {
-        struct Led led_to_update = can_repository_to_led();
         switch (fsm_controller_current_state)
         {
         case STARTING:
@@ -82,40 +121,7 @@ static void led_controller_task_handler()
         case CONFIGURATION:
             break;
         case OPERATION:
-            switch (led_to_update.gpio)
-            {
-            case LED_BLUE_RECEIVE:
-                gpio_set_level(LED_BLUE_RECEIVE, LED_ON);
-                if (xTimerIsTimerActive(receive_message_led_timer) != pdTRUE)
-                {
-                    xTimerStart(receive_message_led_timer, 0);
-                }
-                break;
-            case LED_BLUE_SEND:
-                gpio_set_level(LED_BLUE_SEND, LED_ON);
-                if (xTimerIsTimerActive(send_message_led_timer) != pdTRUE)
-                {
-                    xTimerStart(send_message_led_timer, 0);
-                }
-                break;
-            default:
-                if (led_to_update.gpio != LED_NONE)
-                {
-                    gpio_set_level(led_to_update.gpio, led_to_update.value);
-                }
-                break;
-            }
-
-            if (receive_message_led_interrupt_flag == 1)
-            {
-                gpio_set_level(LED_BLUE_RECEIVE, LED_OFF);
-                receive_message_led_interrupt_flag = 0;
-            }
-            if (send_message_led_interrupt_flag == 1)
-            {
-                gpio_set_level(LED_BLUE_SEND, LED_OFF);
-                send_message_led_interrupt_flag = 0;
-            }
+            handle_led_update();
             break;
         }
 
