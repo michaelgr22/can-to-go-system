@@ -160,7 +160,6 @@ static void can_controller_task_handler(void *args)
     can_repository_init();
     xTimerStart(send_test_message_timer, 0);
 
-    int test_can_bus_result;
     while (1)
     {
         switch (fsm_controller_current_state)
@@ -172,14 +171,10 @@ static void can_controller_task_handler(void *args)
         case OPERATION:
             if (send_test_message_timer_interrupt_flag)
             {
-                test_can_bus_result = test_can_bus();
-                if (test_can_bus_result == 1)
+                int test_can_bus_result = test_can_bus();
+                if (test_can_bus_result >= 0)
                 {
-                    ESP_LOGI(log_tag, "can bus works successfully");
-                }
-                else if (test_can_bus_result == 0)
-                {
-                    ESP_LOGI(log_tag, "can bus is broken");
+                    can_repository_distribute_can_bus_status(test_can_bus_result);
                 }
 
                 send_test_message_timer_interrupt_flag = 0;

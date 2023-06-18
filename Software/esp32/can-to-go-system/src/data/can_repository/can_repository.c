@@ -83,6 +83,24 @@ extern void can_repository_distribute_send_message()
     xQueueSend(led_status_queue, &led_blue_send, 1);
 }
 
+extern void can_repository_distribute_can_bus_status(int is_can_bus_working)
+{
+    struct Led led_green = {LED_GREEN, LED_ON};
+    struct Led led_red = {LED_RED, LED_ON};
+    if (is_can_bus_working)
+    {
+        ESP_LOGI(log_tag, "can bus works successfully");
+        led_red.value = LED_OFF;
+    }
+    else
+    {
+        ESP_LOGI(log_tag, "can bus is broken");
+        led_green.value = LED_OFF;
+    }
+    xQueueSend(led_status_queue, &led_green, 1);
+    xQueueSend(led_status_queue, &led_red, 1);
+}
+
 extern int can_repository_received_message_to_display(char *display_message_text)
 {
     struct MessageItem received_message_item;

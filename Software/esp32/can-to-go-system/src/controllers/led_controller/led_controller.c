@@ -99,6 +99,10 @@ static void led_controller_task_handler()
                 }
                 break;
             default:
+                if (led_to_update.gpio != LED_NONE)
+                {
+                    gpio_set_level(led_to_update.gpio, led_to_update.value);
+                }
                 break;
             }
 
