@@ -27,7 +27,7 @@ static const char *log_tag = "can_controller";
 TimerHandle_t send_test_message_timer;
 const char send_test_message_timer_name[] = "SEND_TEST_MESSAGE_TIMER";
 int send_test_message_timer_interrupt_flag = 0;
-const int send_test_message_timer_period_ms = 100;
+const int send_test_message_timer_period_ms = 50;
 
 /*========== Static Function Prototypes =====================================*/
 
