@@ -4,9 +4,10 @@
 
 #include <string.h>
 #include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "esp_timer.h"
+// #include "esp_timer.h"
 #include "driver/twai.h"
 
 #include "controllers/fsm_controller/fsm_controller.h"
@@ -23,7 +24,20 @@
 
 static const char *log_tag = "can_controller";
 
+TimerHandle_t send_test_message_timer;
+const char send_test_message_timer_name[] = "SEND_TEST_MESSAGE_TIMER";
+int send_test_message_timer_interrupt_flag = 0;
+const int send_test_message_timer_period_ms = 100;
+
 /*========== Static Function Prototypes =====================================*/
+
+/*========== Static Function Implementations ================================*/
+
+static void send_test_message_timer_interrupt_handler(TimerHandle_t timer)
+{
+    xTimerStopFromISR(timer, 0);
+    send_test_message_timer_interrupt_flag = 1;
+}
 
 static void init_can(twai_timing_config_t *p_twai_timing_config)
 {
@@ -52,9 +66,10 @@ static void init_can(twai_timing_config_t *p_twai_timing_config)
         ESP_LOGE(log_tag, "Failed to start driver");
         return;
     }
+
+    send_test_message_timer = xTimerCreate(send_test_message_timer_name, pdMS_TO_TICKS(send_test_message_timer_period_ms), pdTRUE, 0, send_test_message_timer_interrupt_handler);
 }
 
-/*========== Static Function Implementations ================================*/
 static void receive_can_messages_lookup()
 {
     twai_message_t message;
@@ -137,15 +152,11 @@ static void can_controller_task_handler(void *args)
 
     init_can(p_baudrate);
     can_repository_init();
-
-    int64_t previous_micros = 0UL;
-    int64_t interval = 100000UL;
+    xTimerStart(send_test_message_timer, 0);
 
     int test_can_bus_result;
     while (1)
     {
-        int64_t current_micros = esp_timer_get_time();
-
         switch (fsm_controller_current_state)
         {
         case STARTING:
@@ -153,7 +164,7 @@ static void can_controller_task_handler(void *args)
         case CONFIGURATION:
             break;
         case OPERATION:
-            if (current_micros - previous_micros > interval)
+            if (send_test_message_timer_interrupt_flag)
             {
                 test_can_bus_result = test_can_bus();
                 if (test_can_bus_result == 1)
@@ -164,7 +175,9 @@ static void can_controller_task_handler(void *args)
                 {
                     ESP_LOGI(log_tag, "can bus is broken");
                 }
-                previous_micros = current_micros;
+
+                send_test_message_timer_interrupt_flag = 0;
+                xTimerStart(send_test_message_timer, 0);
             }
             receive_can_messages_lookup();
             break;
