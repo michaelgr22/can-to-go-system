@@ -9,6 +9,7 @@
 #include "controllers/uart_controller/uart_controller.h"
 #include "controllers/display_controller/utils/baudrate_menu/baudrate_menu.h"
 #include "controllers/can_controller/can_controller.h"
+#include "controllers/led_controller/led_controller.h"
 
 /*========== Macros and Definitions =========================================*/
 
@@ -29,6 +30,7 @@ static void fsm_controller_task_handler(void *args)
 
     uart_controller_create_task();
     display_controller_create_task();
+    led_controller_create_task();
 
     vTaskDelay(500 / portTICK_PERIOD_MS);
 

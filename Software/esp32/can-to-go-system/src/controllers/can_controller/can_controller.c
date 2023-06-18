@@ -75,7 +75,7 @@ static void receive_can_messages_lookup()
             strcat(result, item);
         }
 
-        can_repository_send_message(message);
+        can_repository_distribute_received_message(message);
         ESP_LOGI(log_tag, "Message received: %ld %s", message.identifier, result);
     }
 }

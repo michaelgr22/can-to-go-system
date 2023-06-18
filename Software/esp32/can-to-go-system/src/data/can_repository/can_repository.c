@@ -6,65 +6,101 @@
 #include "freertos/queue.h"
 #include "esp_log.h"
 
+#include "data/models/display/message_item.h"
+
 /*========== Macros and Definitions =========================================*/
 
-#define RECEIVED_MESSAGES_QUEUE_LENGTH 15
-#define RECEIVED_MESSAGES_QUEUE_ITEM_SIZE sizeof(twai_message_t)
+#define DISPLAY_MESSAGES_QUEUE_LENGTH 15
+#define DISPLAY_MESSAGES_QUEUE_ITEM_SIZE sizeof(struct MessageItem)
+#define LED_STATUS_QUEUE_LENGTH 15
+#define LED_STATUS_QUEUE_ITEM_SIZE sizeof(struct Led)
 
 /*========== Static Constant and Variable Definitions =======================*/
 
 static const char *log_tag = "can_repository";
-static QueueHandle_t can_repository_received_messages_queue;
+
+static QueueHandle_t display_messages_queue;
+static QueueHandle_t led_status_queue;
 
 /*========== Static Function Prototypes =====================================*/
 
 /*========== Static Function Implementations ================================*/
 
+static struct MessageItem can_message_to_display_message_item(twai_message_t can_message)
+{
+    struct MessageItem message_item;
+
+    message_item.id = can_message.identifier;
+
+    const int index_data_start = 9;
+    sprintf(message_item.text, "0x%lX", can_message.identifier);
+    const int needed_whitespaces = index_data_start - strlen(message_item.text);
+
+    for (int i = 0; i < needed_whitespaces; i++)
+    {
+        strcat(message_item.text, " ");
+    }
+
+    int arrayLength = sizeof(can_message.data) / sizeof(can_message.data[0]);
+
+    for (int i = 0; i < arrayLength; i++)
+    {
+        char item[10];
+        snprintf(item, sizeof(item), "%d", can_message.data[i]);
+        strcat(message_item.text, item);
+    }
+
+    return message_item;
+}
+
 /*========== Extern Function Implementations ================================*/
 
 extern void can_repository_init()
 {
-    if (can_repository_received_messages_queue == NULL)
+    if (display_messages_queue == NULL)
     {
-        can_repository_received_messages_queue = xQueueCreate(RECEIVED_MESSAGES_QUEUE_LENGTH, RECEIVED_MESSAGES_QUEUE_ITEM_SIZE);
-
-        ESP_LOGI(log_tag, "can repository initialized");
+        display_messages_queue = xQueueCreate(DISPLAY_MESSAGES_QUEUE_LENGTH, DISPLAY_MESSAGES_QUEUE_ITEM_SIZE);
     }
+    if (led_status_queue == NULL)
+    {
+        led_status_queue = xQueueCreate(LED_STATUS_QUEUE_LENGTH, LED_STATUS_QUEUE_ITEM_SIZE);
+    }
+    ESP_LOGI(log_tag, "can repository initialized");
 }
 
-extern void can_repository_send_message(twai_message_t message)
+extern void can_repository_distribute_received_message(twai_message_t received_can_message)
 {
-    xQueueSend(can_repository_received_messages_queue, &message, 10);
+    struct MessageItem received_message_item = can_message_to_display_message_item(received_can_message);
+    xQueueSend(display_messages_queue, &received_message_item, 1);
+
+    struct Led led_blue_send = {LED_BLUE_RECEIVE, LED_ON};
+    xQueueSend(led_status_queue, &led_blue_send, 1);
 }
 
 extern int can_repository_received_message_to_display(char *display_message_text)
 {
-    if (can_repository_received_messages_queue != NULL)
+    struct MessageItem received_message_item;
+    if (display_messages_queue != NULL)
     {
-        twai_message_t received_message;
-        if (xQueueReceive(can_repository_received_messages_queue, &received_message, 1) == pdPASS)
+        if (xQueueReceive(display_messages_queue, &received_message_item, 1) == pdPASS)
         {
-            const int index_data_start = 9;
-            sprintf(display_message_text, "0x%lX", received_message.identifier);
-            const int needed_whitespaces = index_data_start - strlen(display_message_text);
-
-            for (int i = 0; i < needed_whitespaces; i++)
-            {
-                strcat(display_message_text, " ");
-            }
-
-            int arrayLength = sizeof(received_message.data) / sizeof(received_message.data[0]);
-
-            for (int i = 0; i < arrayLength; i++)
-            {
-                char item[10];
-                snprintf(item, sizeof(item), "%d", received_message.data[i]);
-                strcat(display_message_text, item);
-            }
-
-            return received_message.identifier;
+            strcpy(display_message_text, received_message_item.text);
+            return received_message_item.id;
         }
     }
-
     return -1;
+}
+
+extern struct Led can_repository_to_led()
+{
+    struct Led led;
+    if (led_status_queue != NULL)
+    {
+        if (xQueueReceive(led_status_queue, &led, 1) == pdPASS)
+        {
+            return led;
+        }
+    }
+    struct Led no_led = {LED_NONE, 0};
+    return no_led;
 }
