@@ -8,9 +8,8 @@
   flowchart TB
     Starting[Starting]
     Configuration[Configuration];
-    Validation[Validation]
-    Listening[Listening];
-    Starting --> Configuration --> Validation --> Listening;
+    Operation[Operation]
+    Starting --> Configuration --> Operation
 ```
 
 ## States
@@ -39,10 +38,13 @@ sequenceDiagram
 
     FSM->>DISPLAY: get Baudrate
     DISPLAY-->>FSM: Baudrate 
+    FSM->>DISPLAY: get normal/extended
+    DISPLAY-->FSM: normal/extended
+
     FSM->>CAN: start CAN with configuration
 ```
 
-### Validation
+### Operation
 ```mermaid
 sequenceDiagram
     participant FSM
@@ -51,31 +53,15 @@ sequenceDiagram
     participant DISPLAY
     participant LEDS
 
-    FSM->>CAN: trigger validation state [Queue]
-    CAN->>CAN: send validation message
-    CAN-->>DISPLAY: result validation message [Queue]
-    CAN-->>LEDS: result validation message [Queue]
-    CAN-->>UART: result validation message [Queue]
-    DISPLAY->>DISPLAY: show validation result
-    LEDS->>LEDS: show validation result
-    UART->>UART: show validation result
-```
-
-### Listening
-```mermaid
-sequenceDiagram
-    participant FSM
-    participant UART
-    participant CAN
-    participant DISPLAY
-    participant PERIPHERIE
-
-    FSM->>CAN: trigger listening state [Queue]
+    FSM->>CAN: set Operation state
     CAN->>CAN: listen to messages
-    CAN-->>DISPLAY: send message [Queue]
-    CAN-->>LEDS: send message [Queue]
-    CAN-->>UART: send message [Queue]
-    DISPLAY->>DISPLAY: show message
-    LEDS->>LEDS: show message blink
-    UART->>UART: show message
+    CAN->>CAN: test CAN bus
+    CAN-->>DISPLAY: send received message [Queue]
+    CAN-->>LEDS: send received CAN message [Queue]
+    CAN-->>LEDS: send send CAN message [Queue]
+    CAN-->>LEDS: send test CAN bus result [Queue]
+    DISPLAY->>DISPLAY: show received CAN message
+    LEDS->>LEDS: blink on received CAN message
+    LEDS->>LEDS: blink on send CAN message
+    LEDS->>LEDS: trigger LED for test CAN bus result
 ```
