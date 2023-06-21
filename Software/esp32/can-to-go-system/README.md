@@ -36,6 +36,7 @@ sequenceDiagram
     participant DISPLAY
     participant LEDS
 
+    FSM->>FSM: set Configuration state
     FSM->>DISPLAY: get Baudrate
     DISPLAY-->>FSM: Baudrate 
     FSM->>DISPLAY: get normal/extended
@@ -53,7 +54,7 @@ sequenceDiagram
     participant DISPLAY
     participant LEDS
 
-    FSM->>CAN: set Operation state
+    FSM->>FSM: set Operation state
     CAN->>CAN: listen to messages
     CAN->>CAN: test CAN bus
     CAN-->>DISPLAY: send received message [Queue]
