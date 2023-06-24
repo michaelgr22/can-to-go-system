@@ -6,7 +6,7 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_timer.h"
-
+#include "BluetoothSerial.h"
 #include "driver/uart.h"
 #include "driver/twai.h"
 
