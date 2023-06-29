@@ -22,6 +22,7 @@ sequenceDiagram
     participant DISPLAY
     participant LEDS
 
+    FSM->>FSM: set Starting state
     FSM->>UART: start Task
     FSM->>DISPLAY: start Task
     FSM->>LEDS: start Task
@@ -39,8 +40,6 @@ sequenceDiagram
     FSM->>FSM: set Configuration state
     FSM->>DISPLAY: get Baudrate
     DISPLAY-->>FSM: Baudrate 
-    FSM->>DISPLAY: get normal/extended
-    DISPLAY-->FSM: normal/extended
 
     FSM->>CAN: start CAN with configuration
 ```
