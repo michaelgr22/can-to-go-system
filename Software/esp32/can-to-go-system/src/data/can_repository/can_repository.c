@@ -61,8 +61,7 @@ static struct CanMessage twai_message_to_can_message(twai_message_t twai_message
 {
     struct CanMessage can_message;
 
-    int64_t uptime_micros = esp_timer_get_time() / 1000;
-    ESP_LOGI(log_tag, "Timer: %lld", uptime_micros);
+    int64_t uptime_micros = esp_timer_get_time();
     can_message.micros = uptime_micros;
     can_message.message = twai_message;
 
