@@ -1,6 +1,7 @@
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:can_to_go_gui/data/datasources/esp_rest_api_remote_datasource.dart';
 import 'package:can_to_go_gui/data/models/can_message_model.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final EspRestApiRemoteDataSource espRestApiRemoteDataSource =
