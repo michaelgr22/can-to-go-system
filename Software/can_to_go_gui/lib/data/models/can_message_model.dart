@@ -4,7 +4,7 @@ class CanMessageModel {
   final bool ext;
   final int dlc;
   final List<int> data;
-  int? cycleTime;
+  double? cycleTime;
 
   CanMessageModel({
     required this.micros,
@@ -13,6 +13,17 @@ class CanMessageModel {
     required this.dlc,
     required this.data,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CanMessageModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          micros == other.micros;
+
+  @override
+  int get hashCode => id.hashCode ^ micros.hashCode;
 
   factory CanMessageModel.fromJson(Map<String, dynamic> json) {
     return CanMessageModel(
