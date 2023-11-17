@@ -1,6 +1,8 @@
+import 'package:can_to_go_gui/presentation/pages/can_trace_tab.dart';
 import 'package:flutter/material.dart';
 
-import 'package:can_to_go_gui/presentation/global_app_bar.dart';
+import 'package:can_to_go_gui/presentation/pages/global_app_bar.dart';
+import 'package:can_to_go_gui/presentation/pages/can_overview_tab.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -23,12 +25,8 @@ class HomePage extends StatelessWidget {
             ),
             body: TabBarView(
               children: [
-                Container(
-                  color: Colors.red,
-                ),
-                Container(
-                  color: Colors.green,
-                )
+                CanOverviewTab(),
+                CanTraceTab(),
               ],
             ),
           ),

@@ -12,17 +12,17 @@ class GlobalAppBar extends StatelessWidget {
     return AppBar(
       bottom: TabBar(
         tabs: tabs,
-        indicatorColor: Colors.blue,
-        labelColor: Colors.blue,
+        indicatorColor: Colors.black,
+        labelColor: Colors.black,
         labelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: Colors.black38,
+      backgroundColor: Colors.white,
       title: const Text(
         _title,
         style: TextStyle(
-          color: Colors.blue,
+          color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
       ),

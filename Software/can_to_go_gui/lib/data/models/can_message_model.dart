@@ -34,4 +34,22 @@ class CanMessageModel {
       data: List<int>.from(json["data"] as List<dynamic>),
     );
   }
+
+  List<String> getCanOverviewStringList() {
+    return [
+      "0x${id.toRadixString(16)}",
+      data.map((dataItem) => "0x${dataItem.toRadixString(16)}").toString(),
+      dlc.toString(),
+      cycleTime != null ? cycleTime!.toStringAsFixed(1) : "-",
+    ];
+  }
+
+  List<String> getCanTraceStringList() {
+    return [
+      (micros / 1000).toStringAsFixed(1),
+      "0x${id.toRadixString(16)}",
+      data.map((dataItem) => "0x${dataItem.toRadixString(16)}").toString(),
+      dlc.toString(),
+    ];
+  }
 }
