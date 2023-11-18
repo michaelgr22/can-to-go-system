@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class GlobalAppBar extends StatelessWidget {
   final List<Tab> tabs;
 
-  GlobalAppBar({required this.tabs});
+  const GlobalAppBar({
+    super.key,
+    required this.tabs,
+  });
 
   static const String _title = 'CAN TO GO SYSTEM';
 

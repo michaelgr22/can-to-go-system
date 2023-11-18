@@ -36,7 +36,11 @@ class CanOverviewRepository {
     return mean / 1000.0;
   }
 
-  Future<List<CanMessageModel>> getCanOverviewModels() async {
+  Future<List<CanMessageModel>> getCanOverviewModels(bool refresh) async {
+    if (refresh) {
+      canMessagesCache = [];
+      canMessagesUniqueIdCache = [];
+    }
     final currentCanModelsBatch =
         (await espRestApiRemoteDataSource.getCanMessages()).reversed;
 

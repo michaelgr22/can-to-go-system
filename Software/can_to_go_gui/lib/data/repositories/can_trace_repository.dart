@@ -14,7 +14,11 @@ class CanTraceRepository {
   final EspRestApiRemoteDataSource espRestApiRemoteDataSource =
       EspRestApiRemoteDataSource();
 
-  Future<CanTraceResult> getCanTraceModels() async {
+  Future<CanTraceResult> getCanTraceModels(bool refresh) async {
+    if (refresh) {
+      canMessagesTrace = [];
+    }
+
     final currentCanModelsBatch =
         await espRestApiRemoteDataSource.getCanMessages();
 

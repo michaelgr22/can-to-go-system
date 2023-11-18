@@ -8,7 +8,9 @@ import 'package:can_to_go_gui/data/models/can_message_model.dart';
 class CanOverviewTab extends StatefulWidget {
   final CanOverviewRepository _canOverviewRepository = CanOverviewRepository();
 
-  CanOverviewTab({Key? key}) : super(key: key);
+  CanOverviewTab({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CanOverviewTab> createState() => _CanOverviewTabState();
@@ -20,11 +22,12 @@ class _CanOverviewTabState extends State<CanOverviewTab> {
 
   @override
   void initState() {
+    _updateMessages(true);
     super.initState();
     const oneSecond = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSecond,
-      (Timer t) => _updateMessages(),
+      (Timer t) => _updateMessages(false),
     );
   }
 
@@ -34,9 +37,9 @@ class _CanOverviewTabState extends State<CanOverviewTab> {
     super.dispose();
   }
 
-  Future<void> _updateMessages() async {
+  Future<void> _updateMessages(bool refresh) async {
     final updatedCanMessagesUniqueId =
-        await widget._canOverviewRepository.getCanOverviewModels();
+        await widget._canOverviewRepository.getCanOverviewModels(refresh);
     if (mounted) {
       setState(() {
         canMessagesUniqueId = updatedCanMessagesUniqueId;

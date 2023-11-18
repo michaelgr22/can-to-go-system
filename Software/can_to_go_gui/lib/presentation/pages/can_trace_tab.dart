@@ -22,10 +22,11 @@ class _CanTraceTabState extends State<CanTraceTab> {
   @override
   void initState() {
     super.initState();
+    _updateMessages(true);
     const oneSecond = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSecond,
-      (Timer t) => _updateMessages(),
+      (Timer t) => _updateMessages(false),
     );
   }
 
@@ -35,8 +36,9 @@ class _CanTraceTabState extends State<CanTraceTab> {
     super.dispose();
   }
 
-  Future<void> _updateMessages() async {
-    final canTraceResult = await widget._canTraceRepository.getCanTraceModels();
+  Future<void> _updateMessages(bool refresh) async {
+    final canTraceResult =
+        await widget._canTraceRepository.getCanTraceModels(refresh);
     final updatedCanMessages = canTraceResult.canMessages;
     final updatedAddedCount = canTraceResult.addedCount;
     if (mounted) {
