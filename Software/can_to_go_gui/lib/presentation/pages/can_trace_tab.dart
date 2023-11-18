@@ -16,6 +16,7 @@ class CanTraceTab extends StatefulWidget {
 
 class _CanTraceTabState extends State<CanTraceTab> {
   List<CanMessageModel> canMessages = [];
+  int addedCount = 0;
   late Timer _timer;
 
   @override
@@ -35,11 +36,13 @@ class _CanTraceTabState extends State<CanTraceTab> {
   }
 
   Future<void> _updateMessages() async {
-    final updatedCanMessages =
-        await widget._canTraceRepository.getCanTraceModels();
+    final canTraceResult = await widget._canTraceRepository.getCanTraceModels();
+    final updatedCanMessages = canTraceResult.canMessages;
+    final updatedAddedCount = canTraceResult.addedCount;
     if (mounted) {
       setState(() {
         canMessages = updatedCanMessages;
+        addedCount = updatedAddedCount;
       });
     }
   }
@@ -58,6 +61,7 @@ class _CanTraceTabState extends State<CanTraceTab> {
       rowHeight: 20.0,
       isOverviewTab: false,
       canMessages: canMessages,
+      addedCount: addedCount,
     );
   }
 }

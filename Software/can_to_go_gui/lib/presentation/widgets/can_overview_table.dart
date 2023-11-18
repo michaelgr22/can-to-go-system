@@ -2,29 +2,25 @@ import 'package:can_to_go_gui/data/models/can_message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:can_to_go_gui/presentation/widgets/scrollable_table_view.dart';
 
+// ignore: must_be_immutable
 class CanTable extends StatelessWidget {
   final List<String> headers;
   final List<CanMessageModel> canMessages;
   final bool isOverviewTab;
   final double rowHeight;
+  final int? addedCount;
 
-  const CanTable({
+  CanTable({
     Key? key,
     required this.canMessages,
     required this.headers,
     required this.isOverviewTab,
     required this.rowHeight,
+    this.addedCount,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<List<String>> records = canMessages
-        .map(
-          (e) => isOverviewTab
-              ? e.getCanOverviewStringList()
-              : e.getCanTraceStringList(),
-        )
-        .toList();
     double screenWidth = MediaQuery.of(context).size.width;
     return ScrollableTableView(
       headerBackgroundColor: Colors.grey,
@@ -36,9 +32,23 @@ class CanTable extends StatelessWidget {
           labelFontSize: 20.0,
         );
       }).toList(),
-      rows: records.map((record) {
+      rows: canMessages.asMap().entries.map((entry) {
+        int index = entry.key;
+        CanMessageModel canMessage = entry.value;
+
+        List<String> record = isOverviewTab
+            ? canMessage.getCanOverviewStringList()
+            : canMessage.getCanTraceStringList();
+
+        bool isLastAdded = addedCount != null &&
+            addedCount! < canMessages.length &&
+            index <= addedCount!;
+        Color rowColor = isLastAdded
+            ? const Color.fromARGB(150, 135, 160, 204)
+            : Colors.white;
+
         return TableViewRow(
-          backgroundColor: Colors.white,
+          backgroundColor: rowColor,
           height: rowHeight,
           cells: record.map((value) {
             return TableViewCell(
