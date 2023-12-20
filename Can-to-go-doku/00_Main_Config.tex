@@ -1,0 +1,97 @@
+\documentclass[a4paper,12p]{scrreprt}
+\usepackage[left= 2.5cm,right = 2cm, bottom = 4 cm]{geometry}
+
+% Standard Packages
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx, subfig}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage[backend=biber]{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\addbibresource{references.bib}
+\usepackage{enumitem}
+\usepackage{mathptmx}
+%\usepackage{lmodern}
+%\usepackage{color}
+
+%Für Usepackage Lisiting -> ermöglicht Code einzufügen:
+\lstset{ 
+  language=[Sharp]C,
+  basicstyle=\small\ttfamily, % Kleine Schriftgröße für den Code
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!40!black}, % Dunklere Grüntöne für Kommentare
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  breaklines=true,
+  showspaces=false,
+  showstringspaces=false,
+  frame=none,
+  rulecolor=\color{black},
+  captionpos=b
+}
+
+
+
+% zusätzliche Schriftzeichen der American Mathematical Society
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% Für Abkürzungsverzeichniss
+\usepackage[]{acronym}
+
+% Begin des Dokumenntes
+\begin{document}
+
+\renewcommand{\thechapter}{\roman{chapter}}
+
+\include{can-to-go/01_titelpage}
+
+\newpage
+\pagenumbering{Roman}
+%Ab jetzt mit Kopf und Fußzeile
+% ============= Kopf- und Fußzeile =============
+\pagestyle{fancy}
+
+%
+\lhead{}
+\chead{}
+\rhead{\slshape \leftmark}
+%%
+\lfoot{Bachelorarbeit}
+\cfoot{Leonard Kreil}
+\rfoot{\thepage}
+%%
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%\include{02_Sperrvermerk_Erklärung}
+%\include{03_Zusammenfassung}
+\include{can-to-go/02_Abstract}
+
+%Inhaltsverzeichnis
+\include{10_Abkürzungsverzeichniss}
+\tableofcontents
+\thispagestyle{fancy}
+\pagenumbering{arabic} % Wechsel zu arabischen Seitenzahlen
+\renewcommand{\thechapter}{\arabic{chapter}} % Ändert die Kapitelnummerierung auf römische Ziffern
+
+
+
+%\include{07_CPCOM}
+\include{can-to-go/03_Einleitung}
+
+
+% Verzeichnis der Quellen
+\printbibliography
+% Verzeichnis der Bilder
+\listoffigures
+% Verzeichnis der Listings
+\lstlistoflistings
+
+\end{document}
