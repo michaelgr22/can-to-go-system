@@ -29,8 +29,23 @@
 \noindent Die detaillierte Kostenaufstellung der einzelnen Bauteile sowie der Leiterplatte selbst ist in Tabelle [Tabellennummer] dargestellt. Diese Übersicht bietet eine klare Kostentransparenz und erleichtert die Nachvollziehbarkeit des Projekts.\\
 
 \section{ESP32}
+Der ESP32 ist das Herzstück unseres eingebetteten Systems und übernimmt die zentrale Verarbeitung und Koordination aller Aufgaben. Als hochintegrierter Mikrocontroller verbindet er verschiedene Elemente des Systems, wie die CAN-Schnittstelle, das Display, Status-LEDs und Taster, zu einem funktionierenden Ganzen.\\
+
+\noindent Im Rahmen der CAN-Kommunikation liest der ESP32 die über den CAN-Bus gesendeten Nachrichten und verarbeitet diese. Außerdem steuert ESP32 das Display über das I2C-Protokoll, wobei ein Logikpegelwandler für die Anpassung der unterschiedlichen Spannungsniveaus zwischen dem 3,3-Volt-System des ESP32 und dem 5-Volt-Display verwendet wird.\\
+
+\noindent Die Taster sind über Pull-up-Widerstände an den ESP32 angeschlossen und ermöglichen es den Benutzern, durch einfaches Drücken die Konfigurationseinstellungen vorzunehmen. Der ESP32 interpretiert diese Eingaben und führt die entsprechenden Aktionen aus, wie beispielsweise das Wechseln der Baudrate.\\
+
+\noindent Durch seine Vielseitigkeit und leistungsstarke Verarbeitungskapazität bildet der ESP32 das Rückgrat des Systems.\\
+----BILD ESP32-----
 
 \section{Display}
+\noindent Das Display dient in unserem eingebetteten System als primäre Benutzerschnittstelle, indem es die Baudrateneinstellungen im Konfigurationsmodus sowie die CAN-Nachrichten und ihre Identifier im Operationsmodus anschaulich visualisiert. In unserem System erfolgt die Kommunikation zwischen dem ESP32-Mikrocontroller und dem Display über das I2C-Protokoll (Inter-Integrated Circuit), einem weit verbreiteten Kommunikationsstandard, der für seine Einfachheit und Effizienz in der synchronen seriellen Datenübertragung bekannt ist.\\
+
+\noindent I2C nutzt nur zwei Leitungen – eine für das serielle Daten-Signal (SDA) und eine für das serielle Clock-Signal (SCL) – und ermöglicht es dem Mikrocontroller, mehrere Geräte über einen einzigen Bus zu steuern, wobei jedes Gerät über eine einzigartige Adresse identifiziert wird. Dieser Bus ermöglicht eine bidirektionale Kommunikation, was bedeutet, dass der ESP32 Daten an das Display senden und gleichzeitig Statusinformationen vom Display empfangen kann. \\
+
+\noindent Da der ESP32 mit einer Logikspannung von 3,3 Volt arbeitet, während das Display für eine Betriebsspannung von 5 Volt ausgelegt ist, wurde ein Logikpegelwandler verwendet, um die Signale zwischen diesen beiden Spannungsebenen zu übersetzen (siehe Abschnitt ...).\\
+
+----- BILD DISPLAY-----
 
 \section{SUB-D Stecker}
 \noindent Der SUB-D-Stecker dient der Einbindung von CAN-Nachrichten in das betreffende System. Über diese Schnittstelle lässt sich das 'CAN to go'-System mit dem zu testenden CAN-Netzwerk verbinden. Die Konfiguration der Pin-Belegung ist spezifisch angeordnet: CAN-Low ist an Pin 2, CAN-High an Pin 6, der Masseanschluss (GND) an Pin 3 und die Versorgungsspannung von +5V an Pin 9 angebunden. Abhängig von den systemseitigen Erfordernissen kann ein 120-Ohm-Terminierungswiderstand zwischen CAN-Low und CAN-High integriert werden, um die Signalintegrität zu gewährleisten. Die Schaltung dieses Terminierungswiderstandes erfolgt über den Anschluss J4, der in der grafischen Darstellung blau umkreist ist (siehe Abbildung \ref{fig: SUB-D Stecker und Terminierungswiderstand}).\\
