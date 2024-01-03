@@ -1,5 +1,13 @@
 \chapter{Einleitung}
 \label{sec:Einleitung}
+\noindent Die Arbeit wurde gemeinschaftlich von Michael Graml und Leonard Kreil durchgeführt. Sollten Unterschiede in der Bearbeitung einzelner Abschnitte vorliegen, sind diese in den jeweiligen Kapiteln gekennzeichnet.\\
+
+\begin {centering}
+\includegraphics[width=0.75\textwidth]{img/Can_to_go_system.png}
+\captionof{figure}{CAN-TO-GO System}
+\label{fig: CAN-to-go System}
+\end {centering}  
+
 
 \section{CAN}
 Controller Area Network (CAN) ist ein standardisiertes, robustes Fahrzeugbussystem, das für die Kommunikation zwischen verschiedenen Steuergeräten (ECUs) in Fahrzeugen und anderen industriellen Anwendungen konzipiert wurde. Es ermöglicht den zuverlässigen Datenaustausch mit hoher Fehlertoleranz und geringer Latenz, was besonders in Echtzeitanwendungen wichtig ist. CAN-Busse verwenden ein Nachrichtenbasiertes Protokoll, bei dem jede Nachricht eine eindeutige ID hat, die ihre Priorität bestimmt. Dieses System ist besonders nützlich bei der Diagnose von Netzwerkproblemen, da die Priorisierung von Nachrichten und Fehlererkennungsmechanismen die Fehlersuche erleichtern. Die physikalischen Aspekte des CAN-Busses, wie Abschlusswiderstände und die Verkabelung (CANL/CANH), sind ebenfalls entscheidend für die Netzwerkintegrität. Die Anpassungsfähigkeit hinsichtlich der Baudrate und die Unterstützung verschiedener Netzwerkstrukturen machen CAN vielseitig einsetzbar.\\
@@ -8,13 +16,13 @@ Controller Area Network (CAN) ist ein standardisiertes, robustes Fahrzeugbussyst
 \begin{figure}[h]
     \centering
     \includegraphics[width = 0.55\textwidth]{img/standard_datenframe.png}
-    \caption{Standard Datentelegram}
+    \caption{Standard Datentelegram \cite{3}}
     \label{fig: Standard Datentelegram}
 \end{figure}
 \begin{figure}[h]
     \centering
     \includegraphics[width = 0.55\textwidth]{img/extended_datenframe.png}
-    \caption{Extended Datentelegram}
+    \caption{Extended Datentelegram \cite{3}}
     \label{fig: Extended Datentelegram}
 \end{figure}
 
@@ -25,5 +33,24 @@ Controller Area Network (CAN) ist ein standardisiertes, robustes Fahrzeugbussyst
 
 
 \section{Endprodukt}
+
+\subsection{Überblick}
+\noindent Das Endprodukt des "Can to Go"-Systems bildet eine fortschrittliche Lösung für die Überwachung und Diagnose von CAN-Bussystemen. Es integriert die erforderlichen Funktionen aus der Anforderungsanalyse mit zusätzlichen Merkmalen, die seine Benutzerfreundlichkeit und Vielseitigkeit erhöhen.\\
+
+\subsection{Hauptmerkmale}
+\begin{itemize}
+    \item \textbf{Anschluss und Konnektivität:} Ausgestattet mit einem Anschlusskästchen und SUB-D-Stecker, verfügt das System über Status-LEDs, die den Betriebszustand des CAN-Busses anzeigen. Diese visuellen Indikatoren erleichtern das schnelle Erkennen von Verbindungsproblemen.
+    
+    \item \textbf{Funktionalität und Anpassungsfähigkeit:} Ein optionaler Abschlusswiderstand kann nach Bedarf hinzugeschaltet werden. Die Anpassbarkeit der Baudrate gewährleistet eine breite Kompatibilität mit verschiedenen CAN-Bus-Konfigurationen.
+    
+    \item \textbf{Display und Anzeige:} Das Gerät umfasst ein kleines Display, das CAN-Nachrichten anzeigt. Dieses Display bietet eine direkte, wenn auch begrenzte, Einsicht in die CAN-Kommunikation.
+    
+    \item \textbf{Energieversorgung:} Es enthält keinen eigenen Akku, kann aber durch eine externe Powerbank mit Energie versorgt werden, was eine flexible Nutzung ermöglicht.
+\end{itemize}   
+
+\subsection{Zusätzliche Funktionen}
+\begin{itemize}
+ \item \textbf{App- und Web-Integration:} Ergänzend zum kleinen Display des Geräts ermöglichen eine App und eine Website die detaillierte Ansicht von CAN-Nachrichten, inklusive Zeitstempeln. Diese digitalen Plattformen erlauben eine umfassende Analyse da sie eine größere Benutzeroberfläche als das Display bieten.
+\end{itemize}   
 
 

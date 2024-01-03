@@ -13,11 +13,10 @@
 
 \section{Leiterplattenentwurf}
 \subsection{Entwurfsprozess}
-\begin{enumerate}
+\begin{itemize}
     \item \textbf{Komponentenauswahl und -platzierung:} Zunächst wurden die benötigten elektronischen Bauteile ausgewählt und in den Schaltplan von KiCad integriert. Jedem Bauteil wurde ein entsprechender Footprint zugewiesen. Diese Footprints sind entscheidend, da sie die physische Größe und Platzierung der Komponenten auf der Leiterplatte bestimmen.
-    \item \textbf{Layoutgestaltung in Pcbnew:} Anschließend wurde zu Pcbnew gewechselt, dem spezialisierten Tool innerhalb von KiCad für das Leiterplattenlayout. In diesem Schritt wurden die Bauteile sorgfältig auf der Leiterplatte platziert. Besonderes Augenmerk lag dabei auf der logischen Gruppierung der Komponenten und der Minimierung der Leitungslängen, um Effizienz und Signalintegrität zu gewährleisten.
-    \item \textbf{Gerber-Dateierstellung:} Nach Abschluss des Designs wurde eine Gerber-Datei generiert. Diese Datei enthält alle für die Herstellung der Leiterplatte notwendigen Informationen und wurde an den Leiterplattenhersteller übermittelt.
-\end{enumerate}
+    \item \textbf{Layoutgestaltung:} Im Anschluss wurden die Bauteile sorgfältig auf der Leiterplatte platziert. Besonderes Augenmerk lag dabei auf der logischen Gruppierung der Komponenten und der Minimierung der Leitungslängen, um Effizienz und Signalintegrität zu gewährleisten.
+\end{itemize}
 
 \subsection{Herstellung und Bestückung}
 \begin{itemize}
@@ -26,7 +25,7 @@
     \item \textbf{Bestückung der Leiterplatte:} Die Montage der Bauteile auf der Leiterplatte erfolgte mittels Lötpaste. Bei diesem Prozess wurde besonders auf Präzision und Sauberkeit geachtet, um Kurzschlüsse oder Fehlverbindungen zu vermeiden, die die Funktionalität der Schaltung beeinträchtigen könnten.
 \end {itemize}
 
-\noindent Die detaillierte Kostenaufstellung der einzelnen Bauteile sowie der Leiterplatte selbst ist in Tabelle [Tabellennummer] dargestellt. Diese Übersicht bietet eine klare Kostentransparenz und erleichtert die Nachvollziehbarkeit des Projekts.\\
+\noindent Die detaillierte Kostenaufstellung der einzelnen Bauteile sowie der Leiterplatte selbst ist in Tabelle \ref{tab:Stückliste} dargestellt. Diese Übersicht bietet eine klare Kostentransparenz und erleichtert die Nachvollziehbarkeit des Projekts.\\
 
 \section{ESP32}
 Der ESP32 ist das Herzstück unseres eingebetteten Systems und übernimmt die zentrale Verarbeitung und Koordination aller Aufgaben. Als hochintegrierter Mikrocontroller verbindet er verschiedene Elemente des Systems, wie die CAN-Schnittstelle, das Display, Status-LEDs und Taster, zu einem funktionierenden Ganzen.\\
@@ -36,16 +35,25 @@ Der ESP32 ist das Herzstück unseres eingebetteten Systems und übernimmt die ze
 \noindent Die Taster sind über Pull-up-Widerstände an den ESP32 angeschlossen und ermöglichen es den Benutzern, durch einfaches Drücken die Konfigurationseinstellungen vorzunehmen. Der ESP32 interpretiert diese Eingaben und führt die entsprechenden Aktionen aus, wie beispielsweise das Wechseln der Baudrate.\\
 
 \noindent Durch seine Vielseitigkeit und leistungsstarke Verarbeitungskapazität bildet der ESP32 das Rückgrat des Systems.\\
-----BILD ESP32-----
+
+\begin {centering}
+\includegraphics[width=0.5\textwidth]{img/ESP32.png}
+\captionof{figure}{ESP32 \cite{1}}
+\label{fig: ESP32}
+\end {centering}  
 
 \section{Display}
 \noindent Das Display dient in unserem eingebetteten System als primäre Benutzerschnittstelle, indem es die Baudrateneinstellungen im Konfigurationsmodus sowie die CAN-Nachrichten und ihre Identifier im Operationsmodus anschaulich visualisiert. In unserem System erfolgt die Kommunikation zwischen dem ESP32-Mikrocontroller und dem Display über das I2C-Protokoll (Inter-Integrated Circuit), einem weit verbreiteten Kommunikationsstandard, der für seine Einfachheit und Effizienz in der synchronen seriellen Datenübertragung bekannt ist.\\
 
 \noindent I2C nutzt nur zwei Leitungen – eine für das serielle Daten-Signal (SDA) und eine für das serielle Clock-Signal (SCL) – und ermöglicht es dem Mikrocontroller, mehrere Geräte über einen einzigen Bus zu steuern, wobei jedes Gerät über eine einzigartige Adresse identifiziert wird. Dieser Bus ermöglicht eine bidirektionale Kommunikation, was bedeutet, dass der ESP32 Daten an das Display senden und gleichzeitig Statusinformationen vom Display empfangen kann. \\
 
-\noindent Da der ESP32 mit einer Logikspannung von 3,3 Volt arbeitet, während das Display für eine Betriebsspannung von 5 Volt ausgelegt ist, wurde ein Logikpegelwandler verwendet, um die Signale zwischen diesen beiden Spannungsebenen zu übersetzen (siehe Abschnitt ...).\\
+\noindent Da der ESP32 mit einer Logikspannung von 3,3 Volt arbeitet, während das Display für eine Betriebsspannung von 5 Volt ausgelegt ist, wurde ein Logikpegelwandler verwendet, um die Signale zwischen diesen beiden Spannungsebenen zu übersetzen (siehe Abschnitt ...). Zusätzlich wird für die physische Verbindung des Displays ein serieller I2C/TWI-Schnittstellenadapter verwendet, der bereits im Lieferumfang des Kits enthalten ist.\\
 
------ BILD DISPLAY-----
+\begin{centering}
+  \includegraphics[width=0.5\textwidth]{img/Display.png}
+  \captionof{figure}{Display mit Displayanschluss \cite{4}}
+  \label{fig: Display}
+\end{centering}
 
 \section{SUB-D Stecker}
 \noindent Der SUB-D-Stecker dient der Einbindung von CAN-Nachrichten in das betreffende System. Über diese Schnittstelle lässt sich das 'CAN to go'-System mit dem zu testenden CAN-Netzwerk verbinden. Die Konfiguration der Pin-Belegung ist spezifisch angeordnet: CAN-Low ist an Pin 2, CAN-High an Pin 6, der Masseanschluss (GND) an Pin 3 und die Versorgungsspannung von +5V an Pin 9 angebunden. Abhängig von den systemseitigen Erfordernissen kann ein 120-Ohm-Terminierungswiderstand zwischen CAN-Low und CAN-High integriert werden, um die Signalintegrität zu gewährleisten. Die Schaltung dieses Terminierungswiderstandes erfolgt über den Anschluss J4, der in der grafischen Darstellung blau umkreist ist (siehe Abbildung \ref{fig: SUB-D Stecker und Terminierungswiderstand}).\\
@@ -57,18 +65,19 @@ Der ESP32 ist das Herzstück unseres eingebetteten Systems und übernimmt die ze
 \end{centering}
 
 \section{Can Transciever}
-\noindent Der MCP2562-E/SN Transceiver spielt eine zentrale Rolle im Hardwareaufbau für die CAN-Kommunikation, indem er die Signale aus dem CAN-Netzwerk in digitale Signale umwandelt, die vom ESP32-Mikrocontroller verarbeitet werden können. Der Transceiver agiert als Bindeglied zwischen den differenziellen Signalen des CAN-Busses und den digitalen I/O-Pins des ESP32. Er wandelt die auf dem CAN-Bus empfangenen Hoch- und Niedrigzustände (CAN\_H und CAN\_L) in logische Pegel um, die der Mikrocontroller verstehen kann. Dies ermöglicht eine reibungslose und zuverlässige Kommunikation zwischen den CAN-Geräten und dem Mikrocontroller.\\
+\noindent Der MCP2562-E-P Transceiver spielt eine zentrale Rolle im Hardwareaufbau für die CAN-Kommunikation, indem er die Signale aus dem CAN-Netzwerk in digitale Signale umwandelt, die vom ESP32-Mikrocontroller verarbeitet werden können. Der Transceiver agiert als Bindeglied zwischen den differenziellen Signalen des CAN-Busses und den digitalen I/O-Pins des ESP32. Er wandelt die auf dem CAN-Bus empfangenen Hoch- und Niedrigzustände (CAN\_H und CAN\_L) in logische Pegel um, die der Mikrocontroller verstehen kann. Dies ermöglicht eine reibungslose und zuverlässige Kommunikation zwischen den CAN-Geräten und dem Mikrocontroller.\\
 
-\noindent Zur Implementierung dieser Funktion müssen die CAN\_H und CAN\_L Leitungen des MCP2562-E/SN an die entsprechenden Leitungen des CAN-Busses angeschlossen werden. Die Tx und Rx Pins des Transceivers werden dann mit den entsprechenden digitalen I/O-Pins des ESP32 verbunden, um die Kommunikation zu ermöglichen. Die genaue Pinbelegung und Konfiguration ist in dem Datenblatt des Transceivers zu finden \cite{2}.\\
+\noindent Zur Implementierung dieser Funktion müssen die CAN\_H und CAN\_L Leitungen des MCP2562-E-P an die entsprechenden Leitungen des CAN-Busses angeschlossen werden. Die Tx und Rx Pins des Transceivers werden dann mit den entsprechenden digitalen I/O-Pins des ESP32 verbunden, um die Kommunikation zu ermöglichen. Die genaue Pinbelegung und Konfiguration ist in dem Datenblatt des Transceivers zu finden \cite{2}.\\
 
 \section{Status LEDS}
 In unserem eingebetteten System fungieren Leuchtdioden (LEDs) als visuelle Indikatoren für verschiedene Zustände des Gerätes. Ihre Hauptfunktion besteht darin, den Benutzer über den aktuellen CAN Status zu informieren. Die LEDs sind über 270-Ohm-Widerstände an den Mikrocontroller angeschlossen, um den Strom zu begrenzen, der durch die LEDs fließt. Dies schützt die LEDs vor Überstrom, der sie beschädigen könnte, und stellt sicher, dass sie innerhalb ihrer spezifizierten Stromgrenzen betrieben werden, was zu einer längeren Lebensdauer und zuverlässigeren Leistung führt.\\
 
 \begin{itemize}
-  \item \textbf{Rote LED (D..):} Diese LED beginnt zu leuchten, wenn die Nachrichten auf dem angeschlossenen CAN-Bus nicht interpretiert werden können. Dies dient als Indikator für Störungen oder Fehler im CAN-System.
-  \item \textbf{Grüne LED (D..):} Die grüne LED signalisiert, dass die Nachrichten des CAN-Bus korrekt interpretiert werden und das System ordnungsgemäß funktioniert.
-  \item \textbf{Gelbe LED (D3):} Die Beleuchtung dieser LED zeigt an, dass das System mit Strom versorgt wird, und dient somit als Power-On-Statusanzeige.
-  \item \textbf{Blaue LED (D..):} Diese LED hat eine dual-funktionelle Anzeige: Sie blinkt schnell, um den Empfang von CAN-Nachrichten zu signalisieren, und wechselt zu einem langsamen Blinken, wenn keine CAN-Nachrichten empfangen werden.
+  \item \textbf{Orange LED (D3):} Die Beleuchtung dieser LED zeigt an, dass das System mit Strom versorgt wird, und dient somit als Power-On-Statusanzeige.
+  \item \textbf{Rote   LED (D4):} Diese LED beginnt zu leuchten, wenn die Nachrichten auf dem angeschlossenen CAN-Bus nicht interpretiert werden können. Dies dient als Indikator für Störungen oder Fehler im CAN-System.
+  \item \textbf{Grüne  LED (D5):} Die grüne LED signalisiert, dass die Nachrichten des CAN-Bus korrekt interpretiert werden und das System ordnungsgemäß funktioniert.
+  \item \textbf{Blaue  LED (D6):} Diese LED beginnt zu blinken wenn eine CAN Nachricht gesendet wird.
+  \item \textbf{Blaue  LED (D7):} Diese LED beginnt zu blinken wenn eine CAN Nachricht empfangen wird.
 \end{itemize}
 
 \noindent Die Ansteuerung der LEDs erfolgt direkt durch den ESP32-Mikrocontroller, der die Fähigkeit besitzt, seine GPIO-Pins (General Purpose Input/Output) als Ausgänge zu konfigurieren. Durch Programmierung des Mikrocontrollers kann jeder dieser Pins einen High- oder Low-Zustand annehmen, wobei High bedeutet, dass der Pin eine Spannung ausgibt, die ausreicht, um die LED zum Leuchten zu bringen. Der Low-Zustand hingegen unterbricht den Stromfluss, sodass die LED erlischt.\\
@@ -82,9 +91,9 @@ In unserem eingebetteten System fungieren Leuchtdioden (LEDs) als visuelle Indik
 \noindent Im Konfigurationsmodus unseres Systems ermöglichen es die Taster dem Benutzer, die Einstellungen für die Baudrate zu navigieren und zu bestätigen. Jeder Taster hat eine spezifische Rolle:
 
 \begin{itemize}
-  \item \textbf{Taster S3:} Dieser Taster ermöglicht es dem Benutzer, im Konfigurationsmodus auf dem Display nach oben zu navigieren.
+  \item \textbf{Taster S3:} Dieser Taster ermöglicht es dem Benutzer, auf dem Display nach oben zu navigieren.
   
-  \item \textbf{Taster S4:} Nachdem die gewünschte Baudrate ausgewählt wurde, wird Taster S4 verwendet, um die Auswahl zu bestätigen. Dies führt zum Abschluss des Konfigurationsvorgangs und initiiert den Übergang des Systems in den Operationsmodus.
+  \item \textbf{Taster S4:} Der Taster S4 bietet dem Benutzer die Möglichkeit, Einstellungen zu bestätigen, wie beispielsweise die Auswahl der Baudrate.
   
   \item \textbf{Taster S5:} Sollte der Benutzer im Display nach unten navigieren müssen, wird Taster S5 verwendet.
 \end{itemize}
@@ -97,4 +106,56 @@ In unserem eingebetteten System fungieren Leuchtdioden (LEDs) als visuelle Indik
 
 \noindent Der PCA9306DCTR zeichnet sich durch eine Schaltung aus, die mit Transistoren und Pull-up-Widerständen ausgestattet ist. Diese Komponenten sind präzise konfiguriert, um eine nahtlose Umwandlung von Signalen zu ermöglichen: Ein High-Signal wird von der niedrigeren Spannung des ESP32 (3,3 V) auf die höhere Spannung des Displays (5 V) angehoben und umgekehrt. Diese Funktionsweise stellt sicher, dass es zu keiner Signalverzerrung oder Beeinträchtigung der Signalintegrität kommt. Der PCA9306DCTR ermöglicht so eine reibungslose und sichere Interaktion zwischen dem ESP32 und dem Display, was für die Zuverlässigkeit und Robustheit des Gesamtsystems unerlässlich ist.\\
 
+\section{Bypass Kondensatoren}
+Die Stabilität und Zuverlässigkeit der Stromversorgung sind für die Funktionalität des Systems von entscheidender Bedeutung. Um dies zu gewährleisten, werden Bypass- oder Abblockkondensatoren an den Spannungsausgängen des ESP32 eingesetzt. Diese Kondensatoren spielen eine zentrale Rolle bei der Minimierung von Spannungsschwankungen und elektrischem Rauschen, die die Leistung und das Verhalten des Systems negativ beeinflussen können.\\
+
+\noindent \textbf{Stabilisierung der Versorgungsspannung}\\
+\noindent Bypass-Kondensatoren dienen als lokale Energiereserven, die direkt an den Spannungsausgängen des ESP32 positioniert sind. Sie bieten eine schnelle Reaktionsquelle für Energie, um die Versorgungsspannung konstant zu halten, wenn der Mikrocontroller zwischen energieintensiven Prozessen wechselt.\\
+
+\noindent \textbf{Rauschunterdrückung}\\
+\noindent Elektronische Schaltungen sind anfällig für Rauschen und transiente Störungen, die von anderen Teilen der Schaltung oder externen Quellen stammen können. Die Bypass-Kondensatoren filtern effektiv das hochfrequente Rauschen heraus, indem sie es zur Masse ableiten, und verhindern so, dass es die Leistung des Mikrocontrollers beeinträchtigt.\\
+
+\noindent \textbf{Reaktion auf Lastwechsel}\\
+\noindent Der ESP32 kann plötzliche Lastwechsel erfahren, beispielsweise beim Übergang von einem niedrigen Stromverbrauchszustand zu einer hohen Rechenleistung. Bypass-Kondensatoren helfen, solche Lastwechsel zu bewältigen, indem sie sofort Energie liefern oder aufnehmen, um die Versorgungsspannung zu stabilisieren.\\
+
+\noindent \textbf{Dimensionierung der Bypass-Kondensatoren}\\
+\noindent Zwei Arten von Bypass-Kondensatoren werden typischerweise verwendet:
+\begin{itemize}
+  \item \textbf{Kondensatoren mit 100nF:} Diese sind für die Filterung hochfrequenter Störungen ausgelegt und sind ein Standard in vielen Schaltkreisen, die integrierte Schaltungen enthalten.
+  \item \textbf{Kondensatoren mit 4,7µF:} Sie bieten eine größere Kapazität für die Energieaufnahme und sind besonders effektiv, um die Spannung bei größeren Lastwechseln zu stabilisieren.
+\end{itemize}
+
+\noindent Diese Kondensatoren ergänzen sich gegenseitig, wobei der 100nF-Kondensator schnelle, kurzzeitige Schwankungen abfängt, während der 4,7µF-Kondensator für länger anhaltende Stabilität sorgt. Die Kombination beider Typen stellt sicher, dass der ESP32 unter allen Betriebsbedingungen effizient und fehlerfrei arbeiten kann.
+
+
+
 \section{Stückliste}
+
+\begin{table}[htbp]
+  \begin{center} % Zentriert die Tabelle
+      \begin{tabular}{cccc} % Definiert die Anzahl und Ausrichtung der Spalten (hier: zwei zentrierte Spalten)
+          \hline % Horizontale Linie oberhalb der Tabelle
+          Name & Bauteilbezeichnung & Spezifikationen & Menge \\ % Inhalt der Tabelle, & trennt die Spalten
+          \hline % Horizontale Linie oberhalb der Tabelle
+          ESP32 & ESP-32 Dev Kit C V4 &  & 1\\
+          Widerstand  &  & 270 Ohm & 5 \\
+          Widerstand &  & 120 Ohm & 1 \\
+          Widerstand &  & 1k Ohm & 3 \\
+          Widerstand &  & 10k Ohm & 7\\
+          Widerstand &  & 200k Ohm & 1\\
+          Kondensator &  & 4.7 µF & 2\\
+          Kondensator &  & 100nF & 2\\
+          LED &  & & 5\\
+          SUB-D Stecker & 3-106505-2 & & 1\\
+          Button & B3FS-1010P & & 3\\
+          CAN Transceiver & MCP2562-E-P & & 1\\
+          Logic Level Converter & PCA9306DCTR & & 1\\
+          Display & WayinTop 20x4 2004 LCD & & 1\\
+          Display Anschluss & TWI IIC I2C LCD & & 1\\
+          Leiterplatte &  & & 1\\
+          \hline % Horizontale Linie unterhalb der letzten Zeile
+      \end{tabular}
+  \caption{Stückliste der verwendeten Bauteile}
+  \label{tab:Stückliste}
+  \end{center}
+  \end{table}
