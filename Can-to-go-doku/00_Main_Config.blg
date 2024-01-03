@@ -1,9 +1,0 @@
-[0] Config.pm:307> INFO - This is Biber 2.19
-[1] Config.pm:310> INFO - Logfile is '00_Main_Config.blg'
-[469] biber-MSWIN64:340> INFO - === 
-[656] Biber.pm:419> INFO - Reading '00_Main_Config.bcf'
-[956] Biber.pm:979> INFO - Found 0 citekeys in bib section 0
-[1005] bbl.pm:660> INFO - Writing '00_Main_Config.bbl' with encoding 'UTF-8'
-[1005] bbl.pm:763> INFO - Output to 00_Main_Config.bbl
-[1006] Biber.pm:131> WARN - The file '00_Main_Config.bcf' does not contain any citations!
-[1006] Biber.pm:133> INFO - WARNINGS: 1

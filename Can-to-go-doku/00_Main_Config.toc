@@ -1,4 +1,0 @@
-\babel@toc {ngerman}{}\relax 
-\contentsline {section}{\nonumberline Zusammenfassung / Abstract}{I}{}%
-\contentsline {chapter}{\numberline {1}Einführung}{2}{}%
-\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
